@@ -25,6 +25,7 @@
 {
     [super viewDidLoad];
 
+    // This is to make the UI adjust with the new ios7 action bar. So views will not go below the action bar, but instead will start under it.
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
@@ -34,6 +35,15 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
     
+    [self initTableView];
+}
+
+#pragma mark UI Init Methods
+/**
+ This method is for creating and initializing the table view.
+ **/
+-(void)initTableView
+{
     tableView = [[UITableView alloc]initWithFrame:self.view.frame];
     [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:tableViewCellIdentifier];
     [tableView setDelegate:self];

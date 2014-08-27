@@ -20,6 +20,7 @@
 {
     // Override point for customization after application launch.
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+    // make the master view controller is the main view controller to the navigation.
     MasterViewController *controller = [[MasterViewController alloc]init];
     controller.managedObjectContext = self.managedObjectContext;
     [navigationController pushViewController:controller animated:YES];
