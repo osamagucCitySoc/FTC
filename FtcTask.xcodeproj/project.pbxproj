@@ -177,11 +177,11 @@
 				0463165A19ADAB3F00CE742E /* MasterViewController.m */,
 				046316A519AE1B8C00CE742E /* SettingsViewController.h */,
 				046316A619AE1B8C00CE742E /* SettingsViewController.m */,
+				046316A919AE24F500CE742E /* FullScreenImageViewController.h */,
+				046316AA19AE24F500CE742E /* FullScreenImageViewController.m */,
 				0463165F19ADAB3F00CE742E /* Images.xcassets */,
 				0463165619ADAB3F00CE742E /* FtcTask.xcdatamodeld */,
 				0463164819ADAB3F00CE742E /* Supporting Files */,
-				046316A919AE24F500CE742E /* FullScreenImageViewController.h */,
-				046316AA19AE24F500CE742E /* FullScreenImageViewController.m */,
 			);
 			path = FtcTask;
 			sourceTree = "<group>";

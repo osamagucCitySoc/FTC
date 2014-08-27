@@ -12,6 +12,7 @@
 #import <CoreText/CoreText.h>
 #import "OLGhostAlertView.h"
 #import "SettingsViewController.h"
+#import "FullScreenImageViewController.h"
 
 @interface MasterViewController ()
 - (void)configureCell:(UIView *)contentView atIndexPath:(NSIndexPath *)indexPath neededSize:(int)neededSize;
@@ -244,6 +245,23 @@
     return UIEdgeInsetsMake(10, 10, 10, 10);
 }
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSManagedObject *photoDict = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    NSString* imageKey = [NSString stringWithFormat:@"%@_%@",[[photoDict valueForKey:@"id"] description],[[photoDict valueForKey:@"secret"] description]];
+    UIImage *image = [UIImage imageWithData:[self._imageCache objectForKey:imageKey]];
+    if (image)
+    {
+        FullScreenImageViewController* fullScreenVC = [[FullScreenImageViewController alloc]init];
+        [fullScreenVC setImageChosenByUser:image];
+        [self.navigationController pushViewController:fullScreenVC animated:NO];
+    }else
+    {
+        OLGhostAlertView* alert = [[OLGhostAlertView alloc]initWithTitle:@"Sorry" message:@"Please wait till the image is loaded" timeout:3 dismissible:YES];
+        [alert show];
+    }
+}
+
 #pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -474,6 +492,28 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 350.0f;
+}
+
+/**
+ This method will check when the user clicks on an image in the table view.
+ This will go to the full screen only if the image is loaded and cached.
+ If not will tell the user to wait a bit and click again.
+ **/
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSManagedObject *photoDict = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    NSString* imageKey = [NSString stringWithFormat:@"%@_%@",[[photoDict valueForKey:@"id"] description],[[photoDict valueForKey:@"secret"] description]];
+    UIImage *image = [UIImage imageWithData:[self._imageCache objectForKey:imageKey]];
+    if (image)
+    {
+        FullScreenImageViewController* fullScreenVC = [[FullScreenImageViewController alloc]init];
+        [fullScreenVC setImageChosenByUser:image];
+        [self.navigationController pushViewController:fullScreenVC animated:NO];
+    }else
+    {
+        OLGhostAlertView* alert = [[OLGhostAlertView alloc]initWithTitle:@"Sorry" message:@"Please wait till the image is loaded" timeout:3 dismissible:YES];
+        [alert show];
+    }
 }
 
 
