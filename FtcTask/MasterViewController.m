@@ -457,9 +457,9 @@
         [imageView setImage:[self drawText:[[photoDict valueForKey:@"title"] description] inImage:image]];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         [imageView setNeedsDisplay];
-        dispatch_async(backgroundQueuePicOperations, ^(void) {
+/*        dispatch_async(backgroundQueuePicOperations, ^(void) {
             [self startForFaceDetectionForImage:image imageView:imageView];
-        });
+        });*/
         
     }else
     {
@@ -481,9 +481,9 @@
                     [imageView setImage:[self drawText:[[photoDict valueForKey:@"title"] description] inImage:image]];
                     imageView.contentMode = UIViewContentModeScaleAspectFit;
                     [imageView setNeedsDisplay];
-                    dispatch_async(backgroundQueuePicOperations, ^(void) {
+                    /*dispatch_async(backgroundQueuePicOperations, ^(void) {
                         [self startForFaceDetectionForImage:image imageView:imageView];
-                    });
+                    });*/
                 }];
             }
         }];
