@@ -19,6 +19,7 @@
     NSMutableArray *dataSource; // to be used to hold the flickr response
     UIBarButtonItem* changeLayoutButton; // to be used to change between table and collection
     UIRefreshControl* refreshControl;
+    NSDate* lastTimeRefreshed;// to be used when a pull-to-refresh happens, this will make us only load from flickr all image posted after our last update, this is to eliminate loading redundant data
 }
 
 @property (nonatomic, strong)NSCache *_imageCache; // this is to store the images as a cached version

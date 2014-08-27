@@ -24,7 +24,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     // This is to make the UI adjust with the new ios7 action bar. So views will not go below the action bar, but instead will start under it.
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -154,12 +154,12 @@
         
         NSError *error = nil;
         if (![context save:&error]) {
-             // Replace this implementation with code to handle the error appropriately.
-             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
-    }   
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
@@ -171,10 +171,10 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     /*if ([[segue identifier] isEqualToString:@"showDetail"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        [[segue destinationViewController] setDetailItem:object];
-    }*/
+     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+     NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+     [[segue destinationViewController] setDetailItem:object];
+     }*/
 }
 
 #pragma mark - Fetched results controller
@@ -189,7 +189,7 @@
     NSArray * result = [context executeFetchRequest:fetch error:nil];
     for (id photo in result)
         [context deleteObject:photo];
-
+    
 }
 - (NSFetchedResultsController *)fetchedResultsController
 {
@@ -198,35 +198,27 @@
     }
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    // Edit the entity name as appropriate.
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Photo" inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
-    
-    // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
     
-    // Edit the sort key as appropriate.
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"id" ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
     
-    // Edit the section name key path and cache name if appropriate.
-    // nil for section name key path means "no sections".
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:@"DBCache"];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
 	NSError *error = nil;
 	if (![self.fetchedResultsController performFetch:&error]) {
-	     // Replace this implementation with code to handle the error appropriately.
-	     // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
 	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 	    abort();
 	}
     
     return _fetchedResultsController;
-}    
+}
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
@@ -238,15 +230,15 @@
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
     if(!firstLoad)
-    switch(type) {
-        case NSFetchedResultsChangeInsert:
-            [tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
+        switch(type) {
+            case NSFetchedResultsChangeInsert:
+                [tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeDelete:
+                [tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+        }
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
@@ -255,30 +247,30 @@
 {
     UITableView *tableVieww = tableView;
     if(!firstLoad)
-    switch(type) {
-        case NSFetchedResultsChangeInsert:
-            [tableVieww insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [tableVieww deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeUpdate:
-            [self configureCell:[tableVieww cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
-            break;
-            
-        case NSFetchedResultsChangeMove:
-            [tableVieww deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [tableVieww insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
+        switch(type) {
+            case NSFetchedResultsChangeInsert:
+                [tableVieww insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeDelete:
+                [tableVieww deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeUpdate:
+                [self configureCell:[tableVieww cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+                break;
+                
+            case NSFetchedResultsChangeMove:
+                [tableVieww deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [tableVieww insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+        }
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
     if(!firstLoad)
-    [tableView endUpdates];
+        [tableView endUpdates];
 }
 
 - (void)insertNewObject:(NSDictionary*)photoDictionary
@@ -307,13 +299,13 @@
 
 
 /*
-// Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
+ // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
  
  - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    // In the simplest, most efficient, case, reload the table view.
-    [self.tableView reloadData];
-}
+ {
+ // In the simplest, most efficient, case, reload the table view.
+ [self.tableView reloadData];
+ }
  */
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -356,7 +348,7 @@
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                     NSLog(@"%@",@"GOT IT FROM FLICKR");
                     [self._imageCache setObject:downloadedImageData forKey:imageKey];
-                   // [imageView setFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
+                    // [imageView setFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
                     [imageView setImage:[self drawText:[[photoDict valueForKey:@"title"] description] inImage:image]];
                     imageView.contentMode = UIViewContentModeScaleAspectFit;
                     [imageView setNeedsDisplay];
@@ -380,34 +372,53 @@
  **/
 -(void)loadAllFromFlicker
 {
-    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",@"https://api.flickr.com/services/rest/?format=json&method=flickr.photos.search&tags=it&nojsoncallback=1&api_key=",flickrAPI]];
-
+    NSString* urlString =[NSString stringWithFormat:@"%@%@",@"https://api.flickr.com/services/rest/?format=json&method=flickr.photos.search&tags=it&nojsoncallback=1&api_key=",flickrAPI];
+//    to be used when a pull-to-refresh happens, this will make us only load from flickr all image posted after our last update, this is to eliminate loading redundant data
+    
+    if(!firstLoad)
+    {
+        urlString = [urlString stringByAppendingFormat:@"%@%f",@"&min_upload_date=",[lastTimeRefreshed timeIntervalSince1970]];
+    }
+    lastTimeRefreshed = [NSDate date];
+    NSURL* url = [NSURL URLWithString:urlString];
+    
     NSURLSession *defaultSession = [NSURLSession sharedSession];
     NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithURL:url
                                                     completionHandler:^(NSData *data,    NSURLResponse *response, NSError *error) {
                                                         if(error == nil)
                                                         {
+                                                            [refreshControl endRefreshing];
+                                                            [refreshControl endRefreshing];
                                                             NSError* error2;
                                                             NSDictionary* dict =[NSJSONSerialization
                                                                                  JSONObjectWithData:data
                                                                                  options:kNilOptions
                                                                                  error:&error2];
+                                                            NSArray* returnedData = [[dict objectForKey:@"photos"] objectForKey:@"photo"];
                                                             
-                                                            dataSource = [[NSMutableArray alloc]initWithArray:[[dict objectForKey:@"photos"] objectForKey:@"photo"]];
+                                                            if(firstLoad) // then we are first time to get any data so we need to allocate the array
+                                                            {
+                                                                dataSource = [[NSMutableArray alloc]initWithArray:returnedData];
+                                                            }else // else we need just to add to our current data
+                                                            {
+                                                                [dataSource addObjectsFromArray:returnedData];
+                                                            }
                                                             
-                                                            for(NSDictionary* photoDictionary in dataSource)
+                                                            for(NSDictionary* photoDictionary in returnedData)
                                                             {
                                                                 [self insertNewObject:photoDictionary];
                                                                 
                                                             }
                                                             // UI Thread
                                                             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                                                
-                                                                [tableView reloadData];
-                                                                [tableView setNeedsDisplay];
+                                                                if(firstLoad){
+                                                                    [tableView reloadData];
+                                                                    [tableView setNeedsDisplay];
+                                                                    firstLoad = NO;
+                                                                }
                                                                 
                                                             }];
-                                                           
+                                                            
                                                         }else
                                                         {
 #warning add the error here
@@ -418,15 +429,12 @@
 }
 -(void)refreshDataFromFlicker
 {
-    [refreshControl endRefreshing];
-    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"OK" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
+    [self loadAllFromFlicker];
 }
 
 #pragma mark FaceDetection
 -(void)startForFaceDetectionForImage:(UIImage *)image imageView:(UIImageView*)imageView
 {
-
     CGRect rect = [self displayedImageBounds:imageView];
     UIGraphicsBeginImageContext( rect.size );
     [image drawInRect:rect];
@@ -451,25 +459,25 @@
         
         [self addSubViewWithFrame:modifiedFaceBounds imageView:imageView];
         /* This is commented out just due to performance considerations as it is not a fatal requirement in the project. It is just added as a proof of ability and concept.
-        if(faceObject.hasLeftEyePosition)
-        {
-            
-            CGRect leftEye = CGRectMake(faceObject.leftEyePosition.x,(facePicture.size.height-faceObject.leftEyePosition.y), 10, 10);
-            [self addSubViewWithFrame:leftEye imageView:imageView];
-        }
-        
-        if(faceObject.hasRightEyePosition)
-        {
-            
-            CGRect rightEye = CGRectMake(faceObject.rightEyePosition.x, (facePicture.size.height-faceObject.rightEyePosition.y), 10, 10);
-            [self addSubViewWithFrame:rightEye imageView:imageView];
-            
-        }
-        if(faceObject.hasMouthPosition)
-        {
-            CGRect  mouth = CGRectMake(faceObject.mouthPosition.x,facePicture.size.height-faceObject.mouthPosition.y,10, 10);
-            [self addSubViewWithFrame:mouth imageView:imageView];
-        }*/
+         if(faceObject.hasLeftEyePosition)
+         {
+         
+         CGRect leftEye = CGRectMake(faceObject.leftEyePosition.x,(facePicture.size.height-faceObject.leftEyePosition.y), 10, 10);
+         [self addSubViewWithFrame:leftEye imageView:imageView];
+         }
+         
+         if(faceObject.hasRightEyePosition)
+         {
+         
+         CGRect rightEye = CGRectMake(faceObject.rightEyePosition.x, (facePicture.size.height-faceObject.rightEyePosition.y), 10, 10);
+         [self addSubViewWithFrame:rightEye imageView:imageView];
+         
+         }
+         if(faceObject.hasMouthPosition)
+         {
+         CGRect  mouth = CGRectMake(faceObject.mouthPosition.x,facePicture.size.height-faceObject.mouthPosition.y,10, 10);
+         [self addSubViewWithFrame:mouth imageView:imageView];
+         }*/
     }
 }
 
