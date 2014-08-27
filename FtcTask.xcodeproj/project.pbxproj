@@ -46,6 +46,7 @@
 		0463169019ADD16500CE742E /* Grid.png in Resources */ = {isa = PBXBuildFile; fileRef = 0463168E19ADD16500CE742E /* Grid.png */; };
 		0463169119ADD16500CE742E /* List.png in Resources */ = {isa = PBXBuildFile; fileRef = 0463168F19ADD16500CE742E /* List.png */; };
 		0463169319AE109600CE742E /* Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 0463169219AE109600CE742E /* Settings.png */; };
+		0463169619AE166900CE742E /* OLGhostAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463169519AE166900CE742E /* OLGhostAlertView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +93,8 @@
 		0463168E19ADD16500CE742E /* Grid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Grid.png; sourceTree = "<group>"; };
 		0463168F19ADD16500CE742E /* List.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = List.png; sourceTree = "<group>"; };
 		0463169219AE109600CE742E /* Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Settings.png; sourceTree = "<group>"; };
+		0463169419AE166900CE742E /* OLGhostAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OLGhostAlertView.h; sourceTree = "<group>"; };
+		0463169519AE166900CE742E /* OLGhostAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OLGhostAlertView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +177,8 @@
 		0463164819ADAB3F00CE742E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0463169419AE166900CE742E /* OLGhostAlertView.h */,
+				0463169519AE166900CE742E /* OLGhostAlertView.m */,
 				0463169219AE109600CE742E /* Settings.png */,
 				0463168E19ADD16500CE742E /* Grid.png */,
 				0463168F19ADD16500CE742E /* List.png */,
@@ -334,6 +339,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0463168819ADAD0600CE742E /* Photo.m in Sources */,
+				0463169619AE166900CE742E /* OLGhostAlertView.m in Sources */,
 				0463168719ADAD0600CE742E /* _Photo.m in Sources */,
 				0463165E19ADAB3F00CE742E /* DetailViewController.m in Sources */,
 				0463168B19ADAF6200CE742E /* Constants.m in Sources */,

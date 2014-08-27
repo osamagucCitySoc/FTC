@@ -35,7 +35,7 @@
     self.queue.maxConcurrentOperationCount = 4;
     self._imageCache = [[NSCache alloc]init];
     backgroundQueuePicOperations = dispatch_queue_create("osama.rabie.image.thread", NULL);
-     backgroundQueueUICollectionUpdates = dispatch_queue_create("osama.rabie.collectionView.thread", NULL);
+    backgroundQueueUICollectionUpdates = dispatch_queue_create("osama.rabie.collectionView.thread", NULL);
     
     changeLayoutButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"List.png"] style:UIBarButtonItemStylePlain target:self action:@selector(changeLayout:)];
     [changeLayoutButton setTag:2];
@@ -50,10 +50,29 @@
     [self clearOldPhotos];
     [self initTableView];
     [self initCollectionView];
+    [self initLoaderView];
     [self loadAllFromFlicker];
 }
 
 #pragma mark UI Init Methods
+-(void)initLoaderView
+{
+    float xOffset = self.view.bounds.size.width-200;
+    xOffset /=2;
+    float yOffset = self.view.bounds.size.height-200;
+    yOffset /=2;
+    loaderView = [[UIView alloc]initWithFrame:CGRectMake(xOffset, yOffset, 200, 200)];
+    [loaderView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.4]];
+    infoLabel = [[UILabel alloc]initWithFrame:CGRectMake(5, 5, 180, 155)];
+    [infoLabel setTextColor:[UIColor whiteColor]];
+    [infoLabel setText:@"Loading From Flickr.. Please Wait"];
+    [infoLabel setNumberOfLines:4];
+    [loaderView addSubview:infoLabel];
+    busy = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [busy setFrame:CGRectMake((200-busy.frame.size.width)/2, 160, busy.frame.size.width, busy.frame.size.height)];
+    [busy startAnimating];
+    [loaderView addSubview:busy];
+}
 -(void)changeLayout:(id)sender
 {
     if([changeLayoutButton tag] == 1) // we are now on table and need to change to collection
@@ -429,6 +448,8 @@
  **/
 -(void)loadAllFromFlicker
 {
+    [self.view addSubview:loaderView];
+    [self.view setUserInteractionEnabled:NO];
     NSString* urlString =[NSString stringWithFormat:@"%@%@",@"https://api.flickr.com/services/rest/?format=json&method=flickr.photos.search&tags=it&nojsoncallback=1&api_key=",flickrAPI];
     //    to be used when a pull-to-refresh happens, this will make us only load from flickr all image posted after our last update, this is to eliminate loading redundant data
     
@@ -444,8 +465,13 @@
                                                     completionHandler:^(NSData *data,    NSURLResponse *response, NSError *error) {
                                                         if(error == nil)
                                                         {
-                                                            [refreshControl endRefreshing];
-                                                            [refreshControl endRefreshing];
+                                                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                                                [loaderView removeFromSuperview];
+                                                                [self.view setUserInteractionEnabled:YES];
+                                                                [refreshControl endRefreshing];
+                                                                OLGhostAlertView* alert = [[OLGhostAlertView alloc]initWithTitle:@"Done" message:@"Now Images Will Be Loaded Successively" timeout:3 dismissible:YES];
+                                                                [alert show];
+                                                            }];
                                                             NSError* error2;
                                                             NSDictionary* dict =[NSJSONSerialization
                                                                                  JSONObjectWithData:data
@@ -461,13 +487,13 @@
                                                                 [dataSource addObjectsFromArray:returnedData];
                                                             }
                                                             currentChanges = 0;
-                                                           
+                                                            
                                                             for(NSDictionary* photoDictionary in returnedData)
                                                             {
                                                                 currentChanges++;
                                                                 if(!firstLoad)
                                                                 {
-                                                                [self performSelectorOnMainThread:@selector(syncronizeIt:) withObject:photoDictionary waitUntilDone:YES];
+                                                                    [self performSelectorOnMainThread:@selector(syncronizeIt:) withObject:photoDictionary waitUntilDone:YES];
                                                                 }else
                                                                 {
                                                                     [self insertNewObject:photoDictionary];

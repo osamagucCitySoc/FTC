@@ -11,6 +11,7 @@
 #import "Constants.h"
 #import "Photo.h"
 #import <CoreText/CoreText.h>
+#import "OLGhostAlertView.h"
 
 @interface MasterViewController : UIViewController <NSFetchedResultsControllerDelegate,UITableViewDataSource,UITableViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 {
@@ -25,6 +26,11 @@
     dispatch_queue_t backgroundQueuePicOperations; // to be used as a backgroud thread to do all processing functions on image (drawing title, resizing, face etc etc)
     int currentChanges; // to be used to limit the simultenous changes to the UICollectionView when refreshing, as if you do more than 31 at the same time will crashe
     dispatch_queue_t backgroundQueueUICollectionUpdates; // to be used as a backgroud thread to queue the changes because of pull to refresh to the UICollectionView
+    
+    // those all to be used as a unit. They will be used in the case of loading from flicker and cannot respond till we get a response
+    UIView* loaderView;
+    UILabel* infoLabel;
+    UIActivityIndicatorView* busy;
 
 }
 
