@@ -52,6 +52,8 @@
 		046316AE19AE278B00CE742E /* CustomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046316AD19AE278B00CE742E /* CustomNavigationController.m */; };
 		046316B119AE33FD00CE742E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 046316B019AE33FD00CE742E /* Reachability.m */; };
 		046316B319AE3A0B00CE742E /* Close.png in Resources */ = {isa = PBXBuildFile; fileRef = 046316B219AE3A0B00CE742E /* Close.png */; };
+		0471066619AE80B50005E234 /* Activity Diagram.png in Resources */ = {isa = PBXBuildFile; fileRef = 0471066419AE80B50005E234 /* Activity Diagram.png */; };
+		0471066719AE80B50005E234 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0471066519AE80B50005E234 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +112,8 @@
 		046316AF19AE33FD00CE742E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		046316B019AE33FD00CE742E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		046316B219AE3A0B00CE742E /* Close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Close.png; sourceTree = "<group>"; };
+		0471066419AE80B50005E234 /* Activity Diagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity Diagram.png"; sourceTree = "<group>"; };
+		0471066519AE80B50005E234 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +198,8 @@
 		0463164819ADAB3F00CE742E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0471066419AE80B50005E234 /* Activity Diagram.png */,
+				0471066519AE80B50005E234 /* README.md */,
 				046316B219AE3A0B00CE742E /* Close.png */,
 				046316AF19AE33FD00CE742E /* Reachability.h */,
 				046316B019AE33FD00CE742E /* Reachability.m */,
@@ -324,11 +330,13 @@
 			files = (
 				0463166019ADAB3F00CE742E /* Images.xcassets in Resources */,
 				0463169019ADD16500CE742E /* Grid.png in Resources */,
+				0471066719AE80B50005E234 /* README.md in Resources */,
 				046316B319AE3A0B00CE742E /* Close.png in Resources */,
 				0463169319AE109600CE742E /* Settings.png in Resources */,
 				046316A119AE19AF00CE742E /* Localizable.strings in Resources */,
 				0463169119ADD16500CE742E /* List.png in Resources */,
 				0463164C19ADAB3F00CE742E /* InfoPlist.strings in Resources */,
+				0471066619AE80B50005E234 /* Activity Diagram.png in Resources */,
 				0463165519ADAB3F00CE742E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -606,6 +614,7 @@
 				0463167919ADAB3F00CE742E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0463167A19ADAB3F00CE742E /* Build configuration list for PBXNativeTarget "FtcTaskTests" */ = {
 			isa = XCConfigurationList;
@@ -614,6 +623,7 @@
 				0463167C19ADAB3F00CE742E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0463167E19ADACB000CE742E /* Build configuration list for PBXAggregateTarget "Mogenerator" */ = {
 			isa = XCConfigurationList;
@@ -622,6 +632,7 @@
 				0463168019ADACB000CE742E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
