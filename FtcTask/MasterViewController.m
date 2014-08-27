@@ -58,6 +58,8 @@
     {
         [changeLayoutButton setImage:[UIImage imageNamed:@"List.png"]];
         [changeLayoutButton setTag:2];
+        [refreshControl removeFromSuperview];
+        [collectionView addSubview:refreshControl];
         [UIView transitionWithView:self.view
                           duration:1.25
                            options:UIViewAnimationOptionTransitionCrossDissolve
@@ -73,6 +75,8 @@
     {
         [changeLayoutButton setImage:[UIImage imageNamed:@"Grid.png"]];
         [changeLayoutButton setTag:1];
+        [refreshControl removeFromSuperview];
+        [tableView addSubview:refreshControl];
         [UIView transitionWithView:self.view
                           duration:1.25
                            options:UIViewAnimationOptionTransitionCrossDissolve
