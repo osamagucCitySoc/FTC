@@ -36,14 +36,13 @@
     self._imageCache = [[NSCache alloc]init];
     
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
-
-    /*UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initinitWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    
-    self.navigationItem.rightBarButtonItem = addButton;*/
     
     changeLayoutButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Grid.png"] style:UIBarButtonItemStylePlain target:self action:@selector(changeLayout:)];
     [changeLayoutButton setTag:1];
     self.navigationItem.rightBarButtonItem = changeLayoutButton;
+    
+    refreshControl = [[UIRefreshControl alloc]init];
+    [refreshControl addTarget:self action:@selector(refreshDataFromFlicker) forControlEvents:UIControlEventValueChanged];
     
     [self clearOldPhotos];
     [self initTableView];
@@ -70,6 +69,7 @@
 {
     tableView = [[UITableView alloc]initWithFrame:self.view.frame];
     [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:tableViewCellIdentifier];
+    [tableView addSubview:refreshControl];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
     [self.view addSubview:tableView];
@@ -415,6 +415,12 @@
                                                         
                                                     }];
     [dataTask resume];
+}
+-(void)refreshDataFromFlicker
+{
+    [refreshControl endRefreshing];
+    UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"OK" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
 }
 
 #pragma mark FaceDetection
