@@ -12,9 +12,10 @@
 #import "Photo.h"
 #import <CoreText/CoreText.h>
 
-@interface MasterViewController : UIViewController <NSFetchedResultsControllerDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface MasterViewController : UIViewController <NSFetchedResultsControllerDelegate,UITableViewDataSource,UITableViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 {
     UITableView* tableView; // to be used when showing in the table layout.
+    UICollectionView* collectionView; // to be used when showing in the collection layout.
     BOOL firstLoad; // to be used to tell if this is the first load when the app started, this means we will be using [reloadData] in this case, otherwise will be updating using [beginUpdates]/[endUpdates]
     NSMutableArray *dataSource; // to be used to hold the flickr response
     UIBarButtonItem* changeLayoutButton; // to be used to change between table and collection

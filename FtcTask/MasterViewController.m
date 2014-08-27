@@ -11,7 +11,7 @@
 #import "DetailViewController.h"
 
 @interface MasterViewController ()
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+- (void)configureCell:(UIView *)contentView atIndexPath:(NSIndexPath *)indexPath neededSize:(int)neededSize;
 @end
 
 @implementation MasterViewController
@@ -46,6 +46,7 @@
     
     [self clearOldPhotos];
     [self initTableView];
+    [self initCollectionView];
     [self loadAllFromFlicker];
 }
 
@@ -56,12 +57,34 @@
     {
         [changeLayoutButton setImage:[UIImage imageNamed:@"List.png"]];
         [changeLayoutButton setTag:2];
+        [UIView transitionWithView:self.view
+                          duration:1.25
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^
+        {
+            
+            [tableView removeFromSuperview];
+            [self.view addSubview:collectionView];
+            
+        }completion:NULL];
+        
     }else if([changeLayoutButton tag] == 2) // we are now on collection and need to change to table
     {
         [changeLayoutButton setImage:[UIImage imageNamed:@"Grid.png"]];
         [changeLayoutButton setTag:1];
+        [UIView transitionWithView:self.view
+                          duration:1.25
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^
+         {
+             
+             [collectionView removeFromSuperview];
+             [self.view addSubview:tableView];
+             
+         }completion:NULL];
     }
 }
+
 /**
  This method is for creating and initializing the table view.
  **/
@@ -75,11 +98,22 @@
     [self.view addSubview:tableView];
 }
 /**
+ This method is for creating and initializing the collection view.
+ **/
+-(void)initCollectionView
+{
+    collectionView = [[UICollectionView alloc]initWithFrame:self.view.frame collectionViewLayout:[[UICollectionViewFlowLayout alloc]init]];
+    [collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:collectionViewCellIdentifier];
+    [collectionView addSubview:refreshControl];
+    [collectionView setDataSource:self];
+    [collectionView setDelegate:self];
+    //[self.view addSubview:collectionView];
+}
+/**
  This method for drawing an image with color background to be used as a placeholder while loading the image from Flickr
  **/
-- (UIImage *)imageWithColor
+- (UIImage *)imageWithColor:(CGRect)rect
 {
-    CGRect rect = CGRectMake(0.0f, 0.0f, 300.0f, 300.0f);
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     
@@ -119,6 +153,31 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Collection View
+- (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
+    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
+    return [sectionInfo numberOfObjects];
+    
+}
+- (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView
+{
+    return [[self.fetchedResultsController sections] count];
+}
+- (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:collectionViewCellIdentifier forIndexPath:indexPath];
+    [self configureCell:cell.contentView atIndexPath:indexPath neededSize:100];
+    return cell;
+}
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    CGSize retval =  CGSizeMake(100, 100);
+    retval.height += 5; retval.width += 5; return retval;
+}
+
+// 3
+- (UIEdgeInsets)collectionView:
+(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(10, 10, 10, 10);
+}
 
 #pragma mark - Table View
 
@@ -136,36 +195,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableVieww cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:tableViewCellIdentifier forIndexPath:indexPath];
-    [self configureCell:cell atIndexPath:indexPath];
+    [self configureCell:cell.contentView atIndexPath:indexPath neededSize:300];
     return cell;
-}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-        [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
-        
-        NSError *error = nil;
-        if (![context save:&error]) {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-    }
-}
-
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // The table view should not be re-orderable.
-    return NO;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -257,7 +288,7 @@
                 break;
                 
             case NSFetchedResultsChangeUpdate:
-                [self configureCell:[tableVieww cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+                [self configureCell:[tableVieww cellForRowAtIndexPath:indexPath].contentView atIndexPath:indexPath neededSize:300];
                 break;
                 
             case NSFetchedResultsChangeMove:
@@ -308,7 +339,7 @@
  }
  */
 
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureCell:(UIView* )contentView atIndexPath:(NSIndexPath *)indexPath neededSize:(int)neededSize
 {
     NSManagedObject *photoDict = [self.fetchedResultsController objectAtIndexPath:indexPath];
     //    cell.textLabel.text = [[object valueForKey:@"title"] description];
@@ -316,13 +347,13 @@
     NSString* imageKey = [NSString stringWithFormat:@"%@_%@",[[photoDict valueForKey:@"id"] description],[[photoDict valueForKey:@"secret"] description]];
     UIImage *image = [UIImage imageWithData:[self._imageCache objectForKey:imageKey]];
     // this is to center the image in the cell
-    float xOffset = cell.contentView.bounds.size.width-300;
+    float xOffset = contentView.bounds.size.width-neededSize;
     xOffset = xOffset/2;
-    UIImageView* imageView = [[UIImageView alloc]initWithFrame:CGRectMake(xOffset, 25, 300, 300)];
-    [imageView setImage:[self imageWithColor]];
+    UIImageView* imageView = [[UIImageView alloc]initWithFrame:CGRectMake(xOffset, 25, neededSize, neededSize)];
+    [imageView setImage:[self imageWithColor:CGRectMake(0.0f, 0.0f, neededSize, neededSize)]];
     [imageView setTag:2];
-    [[[cell contentView]viewWithTag:2]removeFromSuperview];
-    [[cell contentView]addSubview:imageView];
+    [[contentView viewWithTag:2]removeFromSuperview];
+    [contentView addSubview:imageView];
     if (image)
     {
         NSLog(@"%@",@"FROM CACHE");
@@ -414,6 +445,8 @@
                                                                 if(firstLoad){
                                                                     [tableView reloadData];
                                                                     [tableView setNeedsDisplay];
+                                                                    [collectionView reloadData];
+                                                                    [collectionView setNeedsDisplay];
                                                                     firstLoad = NO;
                                                                 }
                                                                 
