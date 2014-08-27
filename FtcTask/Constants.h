@@ -11,7 +11,7 @@
 @interface Constants : NSObject
 
 
-#define tableViewCellIdentifier = "tableViewCellIdentifier"
-#define flickrAPI = "d4a9ac4b1dfe979055e2ffb2e87dfcbf"
+#define tableViewCellIdentifier @"tableViewCellIdentifier"
+#define flickrAPI @"d4a9ac4b1dfe979055e2ffb2e87dfcbf"
 
 @end
