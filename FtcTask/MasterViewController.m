@@ -30,12 +30,19 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
+    firstLoad = YES;
+    self.queue = [[NSOperationQueue alloc] init];
+    self.queue.maxConcurrentOperationCount = 4;
+    self._imageCache = [[NSCache alloc]init];
+    
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
     
+    [self clearOldPhotos];
     [self initTableView];
+    [self loadAllFromFlicker];
 }
 
 #pragma mark UI Init Methods
@@ -57,25 +64,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)insertNewObject:(id)sender
-{
-    NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-    NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
-    NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:[entity name] inManagedObjectContext:context];
-    
-    // If appropriate, configure the new managed object.
-    // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-    [newManagedObject setValue:[NSDate date] forKey:@"timeStamp"];
-    
-    // Save the context.
-    NSError *error = nil;
-    if (![context save:&error]) {
-         // Replace this implementation with code to handle the error appropriately.
-         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }
-}
 
 #pragma mark - Table View
 
@@ -135,7 +123,19 @@
 }
 
 #pragma mark - Fetched results controller
+/**
+ This method to remove all previously stored data
+ **/
+-(void)clearOldPhotos
+{
+    NSManagedObjectContext * context = [self managedObjectContext];
+    NSFetchRequest * fetch = [[NSFetchRequest alloc] init];
+    [fetch setEntity:[NSEntityDescription entityForName:@"Photo" inManagedObjectContext:context]];
+    NSArray * result = [context executeFetchRequest:fetch error:nil];
+    for (id photo in result)
+        [context deleteObject:photo];
 
+}
 - (NSFetchedResultsController *)fetchedResultsController
 {
     if (_fetchedResultsController != nil) {
@@ -158,7 +158,7 @@
     
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:@"Master"];
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:@"DBCache"];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
@@ -175,12 +175,14 @@
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
-    [tableView beginUpdates];
+    if(!firstLoad)
+        [tableView beginUpdates];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
+    if(!firstLoad)
     switch(type) {
         case NSFetchedResultsChangeInsert:
             [tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
@@ -197,7 +199,7 @@
       newIndexPath:(NSIndexPath *)newIndexPath
 {
     UITableView *tableVieww = tableView;
-    
+    if(!firstLoad)
     switch(type) {
         case NSFetchedResultsChangeInsert:
             [tableVieww insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -220,11 +222,37 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
+    if(!firstLoad)
     [tableView endUpdates];
 }
 
+- (void)insertNewObject:(NSDictionary*)photoDictionary
+{
+    NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+    NSEntityDescription *entity = [Photo entityInManagedObjectContext:context];
+    
+    Photo* photo = [[Photo alloc]initWithEntity:entity insertIntoManagedObjectContext:context];
+    [photo setTitle:[photoDictionary objectForKey:@"title"]];
+    [photo setSecret:[photoDictionary objectForKey:@"secret"]];
+    [photo setServer:[photoDictionary objectForKey:@"server"]];
+    [photo setFarm:[photoDictionary objectForKey:@"farm"]];
+    [photo setOwner:[photoDictionary objectForKey:@"owner"]];
+    [photo setId:[photoDictionary objectForKey:@"id"]];
+    [photo setIsfamily:[photoDictionary objectForKey:@"isfamily"]];
+    [photo setIspublic:[photoDictionary objectForKey:@"ispublic"]];
+    [photo setIsfriend:[photoDictionary objectForKey:@"isfriend"]];
+    
+    // Save the context.
+    NSError *error = nil;
+    if (![context save:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+}
+
+
 /*
-// Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed. 
+// Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
  
  - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
@@ -236,7 +264,54 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
+    cell.textLabel.text = [[object valueForKey:@"title"] description];
 }
+
+
+
+#pragma flicker methods
+/**
+ This method loads the images from flickr and stores them in the db then initiate a reloadData action.
+ **/
+-(void)loadAllFromFlicker
+{
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",@"https://api.flickr.com/services/rest/?format=json&sort=date-taken-desc&method=flickr.photos.search&tags=it&nojsoncallback=1&api_key=",flickrAPI]];
+
+    NSURLSession *defaultSession = [NSURLSession sharedSession];
+    NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithURL:url
+                                                    completionHandler:^(NSData *data,    NSURLResponse *response, NSError *error) {
+                                                        if(error == nil)
+                                                        {
+                                                            NSError* error2;
+                                                            NSDictionary* dict =[NSJSONSerialization
+                                                                                 JSONObjectWithData:data
+                                                                                 options:kNilOptions
+                                                                                 error:&error2];
+                                                            
+                                                            dataSource = [[NSMutableArray alloc]initWithArray:[[dict objectForKey:@"photos"] objectForKey:@"photo"]];
+                                                            
+                                                            for(NSDictionary* photoDictionary in dataSource)
+                                                            {
+                                                                [self insertNewObject:photoDictionary];
+                                                                
+                                                            }
+                                                            // UI Thread
+                                                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                                                
+                                                                [tableView reloadData];
+                                                                [tableView setNeedsDisplay];
+                                                                
+                                                            }];
+                                                           
+                                                        }else
+                                                        {
+#warning add the error here
+                                                        }
+                                                        
+                                                    }];
+    [dataTask resume];
+}
+
+
 
 @end
