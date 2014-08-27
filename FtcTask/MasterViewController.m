@@ -334,9 +334,12 @@
     if (image)
     {
         NSLog(@"%@",@"FROM CACHE");
+        //[imageView setFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
         [imageView setImage:[self drawText:[[photoDict valueForKey:@"title"] description] inImage:image]];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         [imageView setNeedsDisplay];
+        [self startForFaceDetectionForImage:image imageView:imageView];
+        
     }else
     {
         [self.queue addOperationWithBlock:^{
@@ -353,9 +356,11 @@
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                     NSLog(@"%@",@"GOT IT FROM FLICKR");
                     [self._imageCache setObject:downloadedImageData forKey:imageKey];
+                   // [imageView setFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
                     [imageView setImage:[self drawText:[[photoDict valueForKey:@"title"] description] inImage:image]];
                     imageView.contentMode = UIViewContentModeScaleAspectFit;
                     [imageView setNeedsDisplay];
+                    [self startForFaceDetectionForImage:image imageView:imageView];
                 }];
             }
         }];
@@ -412,6 +417,91 @@
     [dataTask resume];
 }
 
+#pragma mark FaceDetection
+-(void)startForFaceDetectionForImage:(UIImage *)image imageView:(UIImageView*)imageView
+{
+
+    CGRect rect = [self displayedImageBounds:imageView];
+    UIGraphicsBeginImageContext( rect.size );
+    [image drawInRect:rect];
+    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [self detectForFacesInUIImage:scaledImage imageView:imageView];
+}
+
+-(void)detectForFacesInUIImage:(UIImage *)facePicture imageView:(UIImageView*)imageView
+{
+    CIImage* image = [CIImage imageWithCGImage:facePicture.CGImage];
+    
+    CIDetector* detector = [CIDetector detectorOfType:CIDetectorTypeFace
+                                              context:nil options:[NSDictionary dictionaryWithObject:CIDetectorAccuracyLow forKey:CIDetectorAccuracy]];
+    
+    NSArray* features = [detector featuresInImage:image];
+    
+    for(CIFaceFeature* faceObject in features)
+    {
+        CGRect modifiedFaceBounds = faceObject.bounds;
+        modifiedFaceBounds.origin.y = facePicture.size.height-faceObject.bounds.size.height-faceObject.bounds.origin.y;
+        
+        [self addSubViewWithFrame:modifiedFaceBounds imageView:imageView];
+        /* This is commented out just due to performance considerations as it is not a fatal requirement in the project. It is just added as a proof of ability and concept.
+        if(faceObject.hasLeftEyePosition)
+        {
+            
+            CGRect leftEye = CGRectMake(faceObject.leftEyePosition.x,(facePicture.size.height-faceObject.leftEyePosition.y), 10, 10);
+            [self addSubViewWithFrame:leftEye imageView:imageView];
+        }
+        
+        if(faceObject.hasRightEyePosition)
+        {
+            
+            CGRect rightEye = CGRectMake(faceObject.rightEyePosition.x, (facePicture.size.height-faceObject.rightEyePosition.y), 10, 10);
+            [self addSubViewWithFrame:rightEye imageView:imageView];
+            
+        }
+        if(faceObject.hasMouthPosition)
+        {
+            CGRect  mouth = CGRectMake(faceObject.mouthPosition.x,facePicture.size.height-faceObject.mouthPosition.y,10, 10);
+            [self addSubViewWithFrame:mouth imageView:imageView];
+        }*/
+    }
+}
+
+-(void)addSubViewWithFrame:(CGRect)frame imageView:(UIImageView*)imageView
+{
+    UIView* highlitView = [[UIView alloc] initWithFrame:frame];
+    highlitView.layer.borderWidth = 1;
+    highlitView.layer.borderColor = [[UIColor whiteColor] CGColor];
+    [imageView addSubview:highlitView];
+}
+
+
+
+- (CGRect)displayedImageBounds:(UIImageView*)imageView {
+    UIImage *image = [imageView image];
+    if(imageView.contentMode != UIViewContentModeScaleAspectFit || !image)
+        return CGRectInfinite;
+    
+    CGFloat boundsWidth  = [imageView bounds].size.width,
+    boundsHeight = [imageView bounds].size.height;
+    
+    CGSize  imageSize  = [image size];
+    CGFloat imageRatio = imageSize.width / imageSize.height;
+    CGFloat viewRatio  = boundsWidth / boundsHeight;
+    
+    if(imageRatio < viewRatio) {
+        CGFloat scale = boundsHeight / imageSize.height;
+        CGFloat width = scale * imageSize.width;
+        CGFloat topLeftX = (boundsWidth - width) * 0.5;
+        return CGRectMake(topLeftX, 0, width, boundsHeight);
+    }
+    
+    CGFloat scale = boundsWidth / imageSize.width;
+    CGFloat height = scale * imageSize.height;
+    CGFloat topLeftY = (boundsHeight - height) * 0.5;
+    
+    return CGRectMake(0, topLeftY, boundsWidth, height);
+}
 
 
 @end
