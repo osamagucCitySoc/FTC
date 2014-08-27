@@ -36,11 +36,13 @@
     self._imageCache = [[NSCache alloc]init];
     backgroundQueuePicOperations = dispatch_queue_create("osama.rabie.image.thread", NULL);
      backgroundQueueUICollectionUpdates = dispatch_queue_create("osama.rabie.collectionView.thread", NULL);
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
     changeLayoutButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"List.png"] style:UIBarButtonItemStylePlain target:self action:@selector(changeLayout:)];
     [changeLayoutButton setTag:2];
     self.navigationItem.rightBarButtonItem = changeLayoutButton;
+    
+    settingsButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Settings.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings:)];
+    self.navigationItem.leftBarButtonItem = settingsButton;
     
     refreshControl = [[UIRefreshControl alloc]init];
     [refreshControl addTarget:self action:@selector(refreshDataFromFlicker) forControlEvents:UIControlEventValueChanged];
@@ -90,6 +92,10 @@
     }
 }
 
+-(void)showSettings:(id)sender
+{
+    
+}
 /**
  This method is for creating and initializing the table view.
  **/
