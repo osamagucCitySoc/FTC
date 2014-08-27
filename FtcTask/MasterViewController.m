@@ -375,7 +375,7 @@
  **/
 -(void)loadAllFromFlicker
 {
-    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",@"https://api.flickr.com/services/rest/?format=json&sort=date-taken-desc&method=flickr.photos.search&tags=it&nojsoncallback=1&api_key=",flickrAPI]];
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",@"https://api.flickr.com/services/rest/?format=json&method=flickr.photos.search&tags=it&nojsoncallback=1&api_key=",flickrAPI]];
 
     NSURLSession *defaultSession = [NSURLSession sharedSession];
     NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithURL:url
