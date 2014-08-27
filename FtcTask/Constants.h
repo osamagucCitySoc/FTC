@@ -14,5 +14,6 @@
 #define tableViewCellIdentifier @"tableViewCellIdentifier"
 #define collectionViewCellIdentifier @"collectionViewCellIdentifier"
 #define flickrAPI @"d4a9ac4b1dfe979055e2ffb2e87dfcbf"
+#define languageSelected @"languageSelected"
 
 @end

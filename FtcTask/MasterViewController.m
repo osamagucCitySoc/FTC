@@ -8,7 +8,6 @@
 
 #import "MasterViewController.h"
 
-#import "DetailViewController.h"
 
 @interface MasterViewController ()
 - (void)configureCell:(UIView *)contentView atIndexPath:(NSIndexPath *)indexPath neededSize:(int)neededSize;
@@ -29,7 +28,6 @@
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    
     firstLoad = YES;
     self.queue = [[NSOperationQueue alloc] init];
     self.queue.maxConcurrentOperationCount = 4;
@@ -55,6 +53,25 @@
 }
 
 #pragma mark UI Init Methods
+-(void)setLanguage:(NSString *)language {
+    
+    NSString *path = [[ NSBundle mainBundle ] pathForResource:language ofType:@"lproj" ];
+    bundle = [NSBundle bundleWithPath:path];
+}
+
+-(NSString *)get:(NSString *)key alter:(NSString *)alternate {
+    return [bundle localizedStringForKey:key value:alternate table:nil];
+}
+
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+    [self setLanguage:[[NSUserDefaults standardUserDefaults]objectForKey:languageSelected]];
+    [self setTitle:[self get:@"MAIN_TITLE" alter:@"Welcome.."]];
+}
+
+
 -(void)initLoaderView
 {
     float xOffset = self.view.bounds.size.width-200;
@@ -113,7 +130,8 @@
 
 -(void)showSettings:(id)sender
 {
-    
+    SettingsViewController* settingsVC = [[SettingsViewController alloc]init];
+    [self.navigationController pushViewController:settingsVC animated:NO];
 }
 /**
  This method is for creating and initializing the table view.

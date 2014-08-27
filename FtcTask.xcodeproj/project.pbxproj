@@ -31,7 +31,6 @@
 		0463165519ADAB3F00CE742E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0463165319ADAB3F00CE742E /* Main.storyboard */; };
 		0463165819ADAB3F00CE742E /* FtcTask.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0463165619ADAB3F00CE742E /* FtcTask.xcdatamodeld */; };
 		0463165B19ADAB3F00CE742E /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463165A19ADAB3F00CE742E /* MasterViewController.m */; };
-		0463165E19ADAB3F00CE742E /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463165D19ADAB3F00CE742E /* DetailViewController.m */; };
 		0463166019ADAB3F00CE742E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0463165F19ADAB3F00CE742E /* Images.xcassets */; };
 		0463166719ADAB3F00CE742E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0463166619ADAB3F00CE742E /* XCTest.framework */; };
 		0463166819ADAB3F00CE742E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0463163F19ADAB3F00CE742E /* Foundation.framework */; };
@@ -47,6 +46,8 @@
 		0463169119ADD16500CE742E /* List.png in Resources */ = {isa = PBXBuildFile; fileRef = 0463168F19ADD16500CE742E /* List.png */; };
 		0463169319AE109600CE742E /* Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 0463169219AE109600CE742E /* Settings.png */; };
 		0463169619AE166900CE742E /* OLGhostAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463169519AE166900CE742E /* OLGhostAlertView.m */; };
+		046316A119AE19AF00CE742E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 046316A319AE19AF00CE742E /* Localizable.strings */; };
+		046316A719AE1B8C00CE742E /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046316A619AE1B8C00CE742E /* SettingsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,8 +76,6 @@
 		0463165719ADAB3F00CE742E /* FtcTask.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FtcTask.xcdatamodel; sourceTree = "<group>"; };
 		0463165919ADAB3F00CE742E /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
 		0463165A19ADAB3F00CE742E /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
-		0463165C19ADAB3F00CE742E /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
-		0463165D19ADAB3F00CE742E /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		0463165F19ADAB3F00CE742E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0463166519ADAB3F00CE742E /* FtcTaskTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FtcTaskTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0463166619ADAB3F00CE742E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -95,6 +94,11 @@
 		0463169219AE109600CE742E /* Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Settings.png; sourceTree = "<group>"; };
 		0463169419AE166900CE742E /* OLGhostAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OLGhostAlertView.h; sourceTree = "<group>"; };
 		0463169519AE166900CE742E /* OLGhostAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OLGhostAlertView.m; sourceTree = "<group>"; };
+		046316A219AE19AF00CE742E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		046316A419AE19BC00CE742E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		046316A519AE1B8C00CE742E /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		046316A619AE1B8C00CE742E /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		046316A819AE1CB600CE742E /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,8 +169,8 @@
 				0463165319ADAB3F00CE742E /* Main.storyboard */,
 				0463165919ADAB3F00CE742E /* MasterViewController.h */,
 				0463165A19ADAB3F00CE742E /* MasterViewController.m */,
-				0463165C19ADAB3F00CE742E /* DetailViewController.h */,
-				0463165D19ADAB3F00CE742E /* DetailViewController.m */,
+				046316A519AE1B8C00CE742E /* SettingsViewController.h */,
+				046316A619AE1B8C00CE742E /* SettingsViewController.m */,
 				0463165F19ADAB3F00CE742E /* Images.xcassets */,
 				0463165619ADAB3F00CE742E /* FtcTask.xcdatamodeld */,
 				0463164819ADAB3F00CE742E /* Supporting Files */,
@@ -188,6 +192,7 @@
 				0463164F19ADAB3F00CE742E /* FtcTask-Prefix.pch */,
 				0463168919ADAF6200CE742E /* Constants.h */,
 				0463168A19ADAF6200CE742E /* Constants.m */,
+				046316A319AE19AF00CE742E /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -280,6 +285,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = 0463163319ADAB3F00CE742E;
 			productRefGroup = 0463163D19ADAB3F00CE742E /* Products */;
@@ -301,6 +307,7 @@
 				0463166019ADAB3F00CE742E /* Images.xcassets in Resources */,
 				0463169019ADD16500CE742E /* Grid.png in Resources */,
 				0463169319AE109600CE742E /* Settings.png in Resources */,
+				046316A119AE19AF00CE742E /* Localizable.strings in Resources */,
 				0463169119ADD16500CE742E /* List.png in Resources */,
 				0463164C19ADAB3F00CE742E /* InfoPlist.strings in Resources */,
 				0463165519ADAB3F00CE742E /* Main.storyboard in Resources */,
@@ -341,10 +348,10 @@
 				0463168819ADAD0600CE742E /* Photo.m in Sources */,
 				0463169619AE166900CE742E /* OLGhostAlertView.m in Sources */,
 				0463168719ADAD0600CE742E /* _Photo.m in Sources */,
-				0463165E19ADAB3F00CE742E /* DetailViewController.m in Sources */,
 				0463168B19ADAF6200CE742E /* Constants.m in Sources */,
 				0463165B19ADAB3F00CE742E /* MasterViewController.m in Sources */,
 				0463165819ADAB3F00CE742E /* FtcTask.xcdatamodeld in Sources */,
+				046316A719AE1B8C00CE742E /* SettingsViewController.m in Sources */,
 				0463165219ADAB3F00CE742E /* AppDelegate.m in Sources */,
 				0463164E19ADAB3F00CE742E /* main.m in Sources */,
 			);
@@ -391,6 +398,16 @@
 				0463167119ADAB3F00CE742E /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		046316A319AE19AF00CE742E /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				046316A219AE19AF00CE742E /* en */,
+				046316A419AE19BC00CE742E /* de */,
+				046316A819AE1CB600CE742E /* Base */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

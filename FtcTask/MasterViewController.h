@@ -12,6 +12,7 @@
 #import "Photo.h"
 #import <CoreText/CoreText.h>
 #import "OLGhostAlertView.h"
+#import "SettingsViewController.h"
 
 @interface MasterViewController : UIViewController <NSFetchedResultsControllerDelegate,UITableViewDataSource,UITableViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 {
@@ -31,6 +32,8 @@
     UIView* loaderView;
     UILabel* infoLabel;
     UIActivityIndicatorView* busy;
+    
+    NSBundle* bundle;
 
 }
 
