@@ -13,6 +13,7 @@
 #import "OLGhostAlertView.h"
 #import "SettingsViewController.h"
 #import "FullScreenImageViewController.h"
+#import "Reachability.h"
 
 @interface MasterViewController ()
 - (void)configureCell:(UIView *)contentView atIndexPath:(NSIndexPath *)indexPath neededSize:(int)neededSize;
@@ -524,78 +525,84 @@
  **/
 -(void)loadAllFromFlicker
 {
-    [self.view addSubview:loaderView];
-    [self.view setUserInteractionEnabled:NO];
-    NSString* urlString =[NSString stringWithFormat:@"%@%@",@"https://api.flickr.com/services/rest/?format=json&method=flickr.photos.search&tags=it&nojsoncallback=1&api_key=",flickrAPI];
-    //    to be used when a pull-to-refresh happens, this will make us only load from flickr all image posted after our last update, this is to eliminate loading redundant data
-    
-    if(!firstLoad)
+    if(![self connectedToNetwork])
     {
-        urlString = [urlString stringByAppendingFormat:@"%@%f",@"&min_upload_date=",[lastTimeRefreshed timeIntervalSince1970]];
-    }
-    lastTimeRefreshed = [NSDate date];
-    NSURL* url = [NSURL URLWithString:urlString];
-    
-    NSURLSession *defaultSession = [NSURLSession sharedSession];
-    NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithURL:url
-                                                    completionHandler:^(NSData *data,    NSURLResponse *response, NSError *error) {
-                                                        if(error == nil)
-                                                        {
-                                                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                                                [loaderView removeFromSuperview];
-                                                                [self.view setUserInteractionEnabled:YES];
+        [refreshControl endRefreshing];
+    }else
+    {
+        [self.view addSubview:loaderView];
+        [self.view setUserInteractionEnabled:NO];
+        NSString* urlString =[NSString stringWithFormat:@"%@%@",@"https://api.flickr.com/services/rest/?format=json&method=flickr.photos.search&tags=it&nojsoncallback=1&api_key=",flickrAPI];
+        //    to be used when a pull-to-refresh happens, this will make us only load from flickr all image posted after our last update, this is to eliminate loading redundant data
+        
+        if(!firstLoad)
+        {
+            urlString = [urlString stringByAppendingFormat:@"%@%f",@"&min_upload_date=",[lastTimeRefreshed timeIntervalSince1970]];
+        }
+        lastTimeRefreshed = [NSDate date];
+        NSURL* url = [NSURL URLWithString:urlString];
+        
+        NSURLSession *defaultSession = [NSURLSession sharedSession];
+        NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithURL:url
+                                                        completionHandler:^(NSData *data,    NSURLResponse *response, NSError *error) {
+                                                            if(error == nil)
+                                                            {
+                                                                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                                                    [loaderView removeFromSuperview];
+                                                                    [self.view setUserInteractionEnabled:YES];
+                                                                    
+                                                                    
+                                                                    [refreshControl endRefreshing];
+                                                                    OLGhostAlertView* alert = [[OLGhostAlertView alloc]initWithTitle:[self get:@"DONE_TITLE" alter:@"Done"] message:[self get:@"DONE_MESSAGE" alter:@"Now Images Will Be Loaded Successively"] timeout:3 dismissible:YES];
+                                                                    [alert show];
+                                                                }];
+                                                                NSError* error2;
+                                                                NSDictionary* dict =[NSJSONSerialization
+                                                                                     JSONObjectWithData:data
+                                                                                     options:kNilOptions
+                                                                                     error:&error2];
+                                                                NSArray* returnedData = [[dict objectForKey:@"photos"] objectForKey:@"photo"];
                                                                 
-                                                                
-                                                                [refreshControl endRefreshing];
-                                                                OLGhostAlertView* alert = [[OLGhostAlertView alloc]initWithTitle:[self get:@"DONE_TITLE" alter:@"Done"] message:[self get:@"DONE_MESSAGE" alter:@"Now Images Will Be Loaded Successively"] timeout:3 dismissible:YES];
-                                                                [alert show];
-                                                            }];
-                                                            NSError* error2;
-                                                            NSDictionary* dict =[NSJSONSerialization
-                                                                                 JSONObjectWithData:data
-                                                                                 options:kNilOptions
-                                                                                 error:&error2];
-                                                            NSArray* returnedData = [[dict objectForKey:@"photos"] objectForKey:@"photo"];
-                                                            
-                                                            if(firstLoad) // then we are first time to get any data so we need to allocate the array
-                                                            {
-                                                                dataSource = [[NSMutableArray alloc]initWithArray:returnedData];
-                                                            }else // else we need just to add to our current data
-                                                            {
-                                                                [dataSource addObjectsFromArray:returnedData];
-                                                            }
-                                                            currentChanges = 0;
-                                                            
-                                                            for(NSDictionary* photoDictionary in returnedData)
-                                                            {
-                                                                currentChanges++;
-                                                                if(!firstLoad)
+                                                                if(firstLoad) // then we are first time to get any data so we need to allocate the array
                                                                 {
-                                                                    [self performSelectorOnMainThread:@selector(syncronizeIt:) withObject:photoDictionary waitUntilDone:YES];
-                                                                }else
+                                                                    dataSource = [[NSMutableArray alloc]initWithArray:returnedData];
+                                                                }else // else we need just to add to our current data
                                                                 {
-                                                                    [self insertNewObject:photoDictionary];
+                                                                    [dataSource addObjectsFromArray:returnedData];
                                                                 }
-                                                            }
-                                                            // UI Thread
-                                                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                                                if(firstLoad){
-                                                                    [tableView reloadData];
-                                                                    [tableView setNeedsDisplay];
-                                                                    [collectionView reloadData];
-                                                                    [collectionView setNeedsDisplay];
-                                                                    firstLoad = NO;
-                                                                }
+                                                                currentChanges = 0;
                                                                 
-                                                            }];
-                                                            
-                                                        }else
-                                                        {
+                                                                for(NSDictionary* photoDictionary in returnedData)
+                                                                {
+                                                                    currentChanges++;
+                                                                    if(!firstLoad)
+                                                                    {
+                                                                        [self performSelectorOnMainThread:@selector(syncronizeIt:) withObject:photoDictionary waitUntilDone:YES];
+                                                                    }else
+                                                                    {
+                                                                        [self insertNewObject:photoDictionary];
+                                                                    }
+                                                                }
+                                                                // UI Thread
+                                                                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                                                    if(firstLoad){
+                                                                        [tableView reloadData];
+                                                                        [tableView setNeedsDisplay];
+                                                                        [collectionView reloadData];
+                                                                        [collectionView setNeedsDisplay];
+                                                                        firstLoad = NO;
+                                                                    }
+                                                                    
+                                                                }];
+                                                                
+                                                            }else
+                                                            {
 #warning add the error here
-                                                        }
-                                                        
-                                                    }];
-    [dataTask resume];
+                                                            }
+                                                            
+                                                        }];
+        [dataTask resume];
+    }
 }
 -(void)refreshDataFromFlicker
 {
@@ -701,6 +708,27 @@
     CGFloat topLeftY = (boundsHeight - height) * 0.5;
     
     return CGRectMake(0, topLeftY, boundsWidth, height);
+}
+
+
+#pragma mark connection
+- (BOOL) connectedToNetwork{
+    Reachability* reachability = [Reachability reachabilityWithHostName:@"google.com"];
+    NetworkStatus remoteHostStatus = [reachability currentReachabilityStatus];
+    
+    if(remoteHostStatus == NotReachable)
+    {
+        return NO;
+    }
+    else if (remoteHostStatus == ReachableViaWWAN)
+    {
+        return YES;
+    }
+    else if (remoteHostStatus == ReachableViaWiFi)
+    {
+        return YES;
+    }
+    return NO;
 }
 
 
