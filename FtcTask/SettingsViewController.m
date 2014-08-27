@@ -7,6 +7,7 @@
 //
 
 #import "SettingsViewController.h"
+#import "Constants.h"
 
 @interface SettingsViewController ()
 
@@ -68,6 +69,21 @@
     [self setTitle:[self get:@"SETTINGS_TITLE" alter:@"Settings"]];
     
 }
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationPortrait;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 
 
 -(void)backClicked:(id)sender

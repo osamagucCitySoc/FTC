@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 
 #import "MasterViewController.h"
+#import "CustomNavigationController.h"
 
 @implementation AppDelegate
 
@@ -24,8 +25,10 @@
        [[NSUserDefaults standardUserDefaults]setObject:@"en" forKey:languageSelected];
        [[NSUserDefaults standardUserDefaults]synchronize];
    }
-    // Override point for customization after application launch.
-    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+
+
+    UINavigationController *navigationController = [[CustomNavigationController alloc] init];
+    self.window.rootViewController = navigationController;
     // make the master view controller is the main view controller to the navigation.
     MasterViewController *controller = [[MasterViewController alloc]init];
     controller.managedObjectContext = self.managedObjectContext;

@@ -48,6 +48,8 @@
 		0463169619AE166900CE742E /* OLGhostAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463169519AE166900CE742E /* OLGhostAlertView.m */; };
 		046316A119AE19AF00CE742E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 046316A319AE19AF00CE742E /* Localizable.strings */; };
 		046316A719AE1B8C00CE742E /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046316A619AE1B8C00CE742E /* SettingsViewController.m */; };
+		046316AB19AE24F500CE742E /* FullScreenImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046316AA19AE24F500CE742E /* FullScreenImageViewController.m */; };
+		046316AE19AE278B00CE742E /* CustomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046316AD19AE278B00CE742E /* CustomNavigationController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +101,10 @@
 		046316A519AE1B8C00CE742E /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		046316A619AE1B8C00CE742E /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		046316A819AE1CB600CE742E /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		046316A919AE24F500CE742E /* FullScreenImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullScreenImageViewController.h; sourceTree = "<group>"; };
+		046316AA19AE24F500CE742E /* FullScreenImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullScreenImageViewController.m; sourceTree = "<group>"; };
+		046316AC19AE278B00CE742E /* CustomNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomNavigationController.h; sourceTree = "<group>"; };
+		046316AD19AE278B00CE742E /* CustomNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomNavigationController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +180,8 @@
 				0463165F19ADAB3F00CE742E /* Images.xcassets */,
 				0463165619ADAB3F00CE742E /* FtcTask.xcdatamodeld */,
 				0463164819ADAB3F00CE742E /* Supporting Files */,
+				046316A919AE24F500CE742E /* FullScreenImageViewController.h */,
+				046316AA19AE24F500CE742E /* FullScreenImageViewController.m */,
 			);
 			path = FtcTask;
 			sourceTree = "<group>";
@@ -193,6 +201,8 @@
 				0463168919ADAF6200CE742E /* Constants.h */,
 				0463168A19ADAF6200CE742E /* Constants.m */,
 				046316A319AE19AF00CE742E /* Localizable.strings */,
+				046316AC19AE278B00CE742E /* CustomNavigationController.h */,
+				046316AD19AE278B00CE742E /* CustomNavigationController.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -350,6 +360,8 @@
 				0463168719ADAD0600CE742E /* _Photo.m in Sources */,
 				0463168B19ADAF6200CE742E /* Constants.m in Sources */,
 				0463165B19ADAB3F00CE742E /* MasterViewController.m in Sources */,
+				046316AE19AE278B00CE742E /* CustomNavigationController.m in Sources */,
+				046316AB19AE24F500CE742E /* FullScreenImageViewController.m in Sources */,
 				0463165819ADAB3F00CE742E /* FtcTask.xcdatamodeld in Sources */,
 				046316A719AE1B8C00CE742E /* SettingsViewController.m in Sources */,
 				0463165219ADAB3F00CE742E /* AppDelegate.m in Sources */,

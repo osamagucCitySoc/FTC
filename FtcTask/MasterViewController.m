@@ -7,7 +7,11 @@
 //
 
 #import "MasterViewController.h"
-
+#import "Constants.h"
+#import "Photo.h"
+#import <CoreText/CoreText.h>
+#import "OLGhostAlertView.h"
+#import "SettingsViewController.h"
 
 @interface MasterViewController ()
 - (void)configureCell:(UIView *)contentView atIndexPath:(NSIndexPath *)indexPath neededSize:(int)neededSize;
@@ -53,6 +57,20 @@
 }
 
 #pragma mark UI Init Methods
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationPortrait;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 -(void)setLanguage:(NSString *)language {
     
     NSString *path = [[ NSBundle mainBundle ] pathForResource:language ofType:@"lproj" ];
