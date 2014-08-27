@@ -295,6 +295,7 @@
     {
         NSLog(@"%@",@"FROM CACHE");
         [imageView setImage:image];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
         [imageView setNeedsDisplay];
     }else
     {
@@ -313,6 +314,7 @@
                     NSLog(@"%@",@"GOT IT FROM FLICKR");
                     [self._imageCache setObject:downloadedImageData forKey:imageKey];
                     [imageView setImage:image];
+                    imageView.contentMode = UIViewContentModeScaleAspectFit;
                     [imageView setNeedsDisplay];
                 }];
             }
