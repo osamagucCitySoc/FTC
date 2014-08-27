@@ -57,6 +57,21 @@
     [tableView setDataSource:self];
     [self.view addSubview:tableView];
 }
+- (UIImage *)imageWithColor
+{
+    CGRect rect = CGRectMake(0.0f, 0.0f, 200.0f, 200.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    
+    CGContextSetFillColorWithColor(context, [[UIColor orangeColor] CGColor]);
+    CGContextFillRect(context, rect);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -263,8 +278,49 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = [[object valueForKey:@"title"] description];
+    NSManagedObject *photoDict = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    //    cell.textLabel.text = [[object valueForKey:@"title"] description];
+    
+    NSString* imageKey = [NSString stringWithFormat:@"%@_%@",[[photoDict valueForKey:@"id"] description],[[photoDict valueForKey:@"secret"] description]];
+    UIImage *image = [UIImage imageWithData:[self._imageCache objectForKey:imageKey]];
+    
+    UIImageView* imageView = [[UIImageView alloc]initWithFrame:CGRectMake(25, 25, 200, 200)];
+    [imageView setImage:[self imageWithColor]];
+    [imageView setTag:2];
+    [[[cell contentView]viewWithTag:2]removeFromSuperview];
+    [[cell contentView]addSubview:imageView];
+    if (image)
+    {
+        NSLog(@"%@",@"FROM CACHE");
+        [imageView setImage:image];
+        [imageView setNeedsDisplay];
+    }else
+    {
+        [self.queue addOperationWithBlock:^{
+            
+            // get the UIImage
+            NSString* urlString = [NSString stringWithFormat:@"https://farm%@.staticflickr.com/%@/%@_m.jpg",[[photoDict valueForKey:@"farm"] description],[[photoDict valueForKey:@"server"] description],imageKey];
+            
+            NSData *downloadedImageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
+            
+            UIImage *image = [UIImage imageWithData:downloadedImageData];
+            
+            if (image)
+            {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    NSLog(@"%@",@"GOT IT FROM FLICKR");
+                    [self._imageCache setObject:downloadedImageData forKey:imageKey];
+                    [imageView setImage:image];
+                    [imageView setNeedsDisplay];
+                }];
+            }
+        }];
+    }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 250.0f;
 }
 
 
