@@ -216,13 +216,30 @@
     constrainedSize.width = maxWidth;
     constrainedSize.height = MAXFLOAT;
     
-    CGSize titleSize = [self.title sizeWithFont:[UIFont boldSystemFontOfSize:TITLE_FONT_SIZE] constrainedToSize:constrainedSize];
+    NSAttributedString *attributedText =
+    [[NSAttributedString alloc]
+     initWithString:self.title
+     attributes:@{ NSFontAttributeName: [UIFont boldSystemFontOfSize:TITLE_FONT_SIZE] }];
+
+    CGRect rect = [attributedText boundingRectWithSize:constrainedSize
+                                               options:NSStringDrawingUsesLineFragmentOrigin
+                                               context:nil];
+    CGSize titleSize = rect.size;
+
     CGSize messageSize = CGSizeZero;
     
     if (self.message) {
-        messageSize = [self.message sizeWithFont:[UIFont systemFontOfSize:MESSAGE_FONT_SIZE] constrainedToSize:constrainedSize];
+        NSAttributedString *attributedText2 =
+        [[NSAttributedString alloc]
+         initWithString:self.message
+         attributes:@{ NSFontAttributeName: [UIFont systemFontOfSize:MESSAGE_FONT_SIZE] }];
         
-        totalHeight = titleSize.height + messageSize.height + floorf(VERTICAL_PADDING * 2.5);
+        CGRect rect2 = [attributedText2 boundingRectWithSize:constrainedSize
+                                                     options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin
+                                                   context:nil];
+        messageSize = rect2.size;
+        
+        totalHeight = titleSize.height + rect2.size.height + floorf(VERTICAL_PADDING * 2.5);
         
     } else {
         totalHeight = titleSize.height + floorf(VERTICAL_PADDING * 2);
