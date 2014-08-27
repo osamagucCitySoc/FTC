@@ -59,7 +59,7 @@
 }
 - (UIImage *)imageWithColor
 {
-    CGRect rect = CGRectMake(0.0f, 0.0f, 200.0f, 200.0f);
+    CGRect rect = CGRectMake(0.0f, 0.0f, 300.0f, 300.0f);
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     
@@ -71,6 +71,25 @@
     UIGraphicsEndImageContext();
     
     return image;
+}
+
+-(UIImage *) drawText:(NSString*) text inImage:(UIImage*)image
+{
+    UIFont *font = [UIFont boldSystemFontOfSize:15];
+    UIGraphicsBeginImageContext(image.size);
+    CGRect rect = CGRectMake(0,0,image.size.width, image.size.height);
+    [image drawInRect:rect];
+    
+    NSDictionary *attrsDictionary =
+    
+    [NSDictionary dictionaryWithObjectsAndKeys:
+     font, NSFontAttributeName,
+     [NSNumber numberWithFloat:1.0], NSBaselineOffsetAttributeName,[UIColor greenColor],NSForegroundColorAttributeName, nil];
+//    [text drawAtPoint:CGPointMake(0, 0) withAttributes:attrsDictionary];
+    [text drawInRect:rect withAttributes:attrsDictionary];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
 }
 
 - (void)didReceiveMemoryWarning
@@ -284,9 +303,9 @@
     NSString* imageKey = [NSString stringWithFormat:@"%@_%@",[[photoDict valueForKey:@"id"] description],[[photoDict valueForKey:@"secret"] description]];
     UIImage *image = [UIImage imageWithData:[self._imageCache objectForKey:imageKey]];
     // this is to center the image in the cell
-    float xOffset = cell.contentView.bounds.size.width-200;
+    float xOffset = cell.contentView.bounds.size.width-300;
     xOffset = xOffset/2;
-    UIImageView* imageView = [[UIImageView alloc]initWithFrame:CGRectMake(xOffset, 25, 200, 200)];
+    UIImageView* imageView = [[UIImageView alloc]initWithFrame:CGRectMake(xOffset, 25, 300, 300)];
     [imageView setImage:[self imageWithColor]];
     [imageView setTag:2];
     [[[cell contentView]viewWithTag:2]removeFromSuperview];
@@ -294,7 +313,7 @@
     if (image)
     {
         NSLog(@"%@",@"FROM CACHE");
-        [imageView setImage:image];
+        [imageView setImage:[self drawText:[[photoDict valueForKey:@"title"] description] inImage:image]];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         [imageView setNeedsDisplay];
     }else
@@ -313,7 +332,7 @@
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                     NSLog(@"%@",@"GOT IT FROM FLICKR");
                     [self._imageCache setObject:downloadedImageData forKey:imageKey];
-                    [imageView setImage:image];
+                    [imageView setImage:[self drawText:[[photoDict valueForKey:@"title"] description] inImage:image]];
                     imageView.contentMode = UIViewContentModeScaleAspectFit;
                     [imageView setNeedsDisplay];
                 }];
@@ -324,7 +343,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 250.0f;
+    return 350.0f;
 }
 
 

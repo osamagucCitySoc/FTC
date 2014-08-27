@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "Constants.h"
 #import "Photo.h"
+#import <CoreText/CoreText.h>
 
 @interface MasterViewController : UIViewController <NSFetchedResultsControllerDelegate,UITableViewDataSource,UITableViewDelegate>
 {

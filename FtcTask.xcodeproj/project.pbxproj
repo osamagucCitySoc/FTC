@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		0463167D19ADACB000CE742E /* Mogenerator */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 0463167E19ADACB000CE742E /* Build configuration list for PBXAggregateTarget "Mogenerator" */;
+			buildPhases = (
+				0463168119ADACB700CE742E /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Mogenerator;
+			productName = Mogenerator;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		0463164019ADAB3F00CE742E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0463163F19ADAB3F00CE742E /* Foundation.framework */; };
 		0463164219ADAB3F00CE742E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0463164119ADAB3F00CE742E /* CoreGraphics.framework */; };
@@ -25,6 +39,10 @@
 		0463166A19ADAB3F00CE742E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0463164519ADAB3F00CE742E /* CoreData.framework */; };
 		0463167219ADAB3F00CE742E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0463167019ADAB3F00CE742E /* InfoPlist.strings */; };
 		0463167419ADAB3F00CE742E /* FtcTaskTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463167319ADAB3F00CE742E /* FtcTaskTests.m */; };
+		0463168719ADAD0600CE742E /* _Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463168419ADAD0600CE742E /* _Photo.m */; };
+		0463168819ADAD0600CE742E /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463168619ADAD0600CE742E /* Photo.m */; };
+		0463168B19ADAF6200CE742E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463168A19ADAF6200CE742E /* Constants.m */; };
+		0463168D19ADC93B00CE742E /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0463168C19ADC93B00CE742E /* CoreText.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +79,13 @@
 		0463166F19ADAB3F00CE742E /* FtcTaskTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FtcTaskTests-Info.plist"; sourceTree = "<group>"; };
 		0463167119ADAB3F00CE742E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0463167319ADAB3F00CE742E /* FtcTaskTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FtcTaskTests.m; sourceTree = "<group>"; };
+		0463168319ADAD0600CE742E /* _Photo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Photo.h; sourceTree = "<group>"; };
+		0463168419ADAD0600CE742E /* _Photo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Photo.m; sourceTree = "<group>"; };
+		0463168519ADAD0600CE742E /* Photo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photo.h; sourceTree = "<group>"; };
+		0463168619ADAD0600CE742E /* Photo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Photo.m; sourceTree = "<group>"; };
+		0463168919ADAF6200CE742E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		0463168A19ADAF6200CE742E /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		0463168C19ADC93B00CE742E /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0463168D19ADC93B00CE742E /* CoreText.framework in Frameworks */,
 				0463164219ADAB3F00CE742E /* CoreGraphics.framework in Frameworks */,
 				0463164619ADAB3F00CE742E /* CoreData.framework in Frameworks */,
 				0463164419ADAB3F00CE742E /* UIKit.framework in Frameworks */,
@@ -111,6 +137,7 @@
 		0463163E19ADAB3F00CE742E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0463168C19ADC93B00CE742E /* CoreText.framework */,
 				0463163F19ADAB3F00CE742E /* Foundation.framework */,
 				0463164119ADAB3F00CE742E /* CoreGraphics.framework */,
 				0463164319ADAB3F00CE742E /* UIKit.framework */,
@@ -123,6 +150,7 @@
 		0463164719ADAB3F00CE742E /* FtcTask */ = {
 			isa = PBXGroup;
 			children = (
+				0463168219ADACFA00CE742E /* ModelClasses */,
 				0463165019ADAB3F00CE742E /* AppDelegate.h */,
 				0463165119ADAB3F00CE742E /* AppDelegate.m */,
 				0463165319ADAB3F00CE742E /* Main.storyboard */,
@@ -144,6 +172,8 @@
 				0463164A19ADAB3F00CE742E /* InfoPlist.strings */,
 				0463164D19ADAB3F00CE742E /* main.m */,
 				0463164F19ADAB3F00CE742E /* FtcTask-Prefix.pch */,
+				0463168919ADAF6200CE742E /* Constants.h */,
+				0463168A19ADAF6200CE742E /* Constants.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -164,6 +194,17 @@
 				0463167019ADAB3F00CE742E /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0463168219ADACFA00CE742E /* ModelClasses */ = {
+			isa = PBXGroup;
+			children = (
+				0463168319ADAD0600CE742E /* _Photo.h */,
+				0463168419ADAD0600CE742E /* _Photo.m */,
+				0463168519ADAD0600CE742E /* Photo.h */,
+				0463168619ADAD0600CE742E /* Photo.m */,
+			);
+			name = ModelClasses;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,6 +274,7 @@
 			targets = (
 				0463163B19ADAB3F00CE742E /* FtcTask */,
 				0463166419ADAB3F00CE742E /* FtcTaskTests */,
+				0463167D19ADACB000CE742E /* Mogenerator */,
 			);
 		};
 /* End PBXProject section */
@@ -258,12 +300,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0463168119ADACB700CE742E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "mogenerator -m \"${PROJECT_DIR}/FtcTask/FtcTask.xcdatamodeld\" -O \"${PROJECT_DIR}/Model\" --template-var arc=true";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		0463163819ADAB3F00CE742E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0463168819ADAD0600CE742E /* Photo.m in Sources */,
+				0463168719ADAD0600CE742E /* _Photo.m in Sources */,
 				0463165E19ADAB3F00CE742E /* DetailViewController.m in Sources */,
+				0463168B19ADAF6200CE742E /* Constants.m in Sources */,
 				0463165B19ADAB3F00CE742E /* MasterViewController.m in Sources */,
 				0463165819ADAB3F00CE742E /* FtcTask.xcdatamodeld in Sources */,
 				0463165219ADAB3F00CE742E /* AppDelegate.m in Sources */,
@@ -453,6 +514,20 @@
 			};
 			name = Release;
 		};
+		0463167F19ADACB000CE742E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		0463168019ADACB000CE742E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -478,6 +553,14 @@
 			buildConfigurations = (
 				0463167B19ADAB3F00CE742E /* Debug */,
 				0463167C19ADAB3F00CE742E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		0463167E19ADACB000CE742E /* Build configuration list for PBXAggregateTarget "Mogenerator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0463167F19ADACB000CE742E /* Debug */,
+				0463168019ADACB000CE742E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
