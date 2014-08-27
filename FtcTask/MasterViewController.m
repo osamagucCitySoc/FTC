@@ -597,7 +597,8 @@
                                                                 
                                                             }else
                                                             {
-#warning add the error here
+                                                                OLGhostAlertView* alert = [[OLGhostAlertView alloc]initWithTitle:[self get:@"SORRY_TITLE" alter:@"Sorry"] message:[self get:@"ERROR_MESSAGE" alter:@"Error happened from Flickr.."] timeout:3 dismissible:YES];
+                                                                [alert show];
                                                             }
                                                             
                                                         }];

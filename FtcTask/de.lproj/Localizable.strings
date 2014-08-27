@@ -5,4 +5,5 @@
 "DONE_MESSAGE" = "Jetzt Bilder nacheinander geladen werden";
 "SORRY_TITLE" = "Entschuldigung..";
 "SORRY_MESSAGE" = "Bitte warten Sie, bis das Bild geladen";
+"ERROR_MESSAGE" = "Fehler passiert von Flickr .."
 "BACK" = "Zurück..";
