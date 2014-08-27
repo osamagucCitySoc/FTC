@@ -283,8 +283,10 @@
     
     NSString* imageKey = [NSString stringWithFormat:@"%@_%@",[[photoDict valueForKey:@"id"] description],[[photoDict valueForKey:@"secret"] description]];
     UIImage *image = [UIImage imageWithData:[self._imageCache objectForKey:imageKey]];
-    
-    UIImageView* imageView = [[UIImageView alloc]initWithFrame:CGRectMake(25, 25, 200, 200)];
+    // this is to center the image in the cell
+    float xOffset = cell.contentView.bounds.size.width-200;
+    xOffset = xOffset/2;
+    UIImageView* imageView = [[UIImageView alloc]initWithFrame:CGRectMake(xOffset, 25, 200, 200)];
     [imageView setImage:[self imageWithColor]];
     [imageView setTag:2];
     [[[cell contentView]viewWithTag:2]removeFromSuperview];
