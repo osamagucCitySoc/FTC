@@ -37,8 +37,13 @@
     
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
+    /*UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initinitWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
+    
+    self.navigationItem.rightBarButtonItem = addButton;*/
+    
+    changeLayoutButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Grid.png"] style:UIBarButtonItemStylePlain target:self action:@selector(changeLayout:)];
+    [changeLayoutButton setTag:1];
+    self.navigationItem.rightBarButtonItem = changeLayoutButton;
     
     [self clearOldPhotos];
     [self initTableView];
@@ -46,6 +51,18 @@
 }
 
 #pragma mark UI Init Methods
+-(void)changeLayout:(id)sender
+{
+    if([changeLayoutButton tag] == 1) // we are now on table and need to change to collection
+    {
+        [changeLayoutButton setImage:[UIImage imageNamed:@"List.png"]];
+        [changeLayoutButton setTag:2];
+    }else if([changeLayoutButton tag] == 2) // we are now on collection and need to change to table
+    {
+        [changeLayoutButton setImage:[UIImage imageNamed:@"Grid.png"]];
+        [changeLayoutButton setTag:1];
+    }
+}
 /**
  This method is for creating and initializing the table view.
  **/
@@ -57,6 +74,9 @@
     [tableView setDataSource:self];
     [self.view addSubview:tableView];
 }
+/**
+ This method for drawing an image with color background to be used as a placeholder while loading the image from Flickr
+ **/
 - (UIImage *)imageWithColor
 {
     CGRect rect = CGRectMake(0.0f, 0.0f, 300.0f, 300.0f);
@@ -72,7 +92,9 @@
     
     return image;
 }
-
+/**
+ This method is used to DRAW a text that will represent the title of the image
+ **/
 -(UIImage *) drawText:(NSString*) text inImage:(UIImage*)image
 {
     UIFont *font = [UIFont boldSystemFontOfSize:15];
@@ -85,7 +107,6 @@
     [NSDictionary dictionaryWithObjectsAndKeys:
      font, NSFontAttributeName,
      [NSNumber numberWithFloat:1.0], NSBaselineOffsetAttributeName,[UIColor greenColor],NSForegroundColorAttributeName, nil];
-//    [text drawAtPoint:CGPointMake(0, 0) withAttributes:attrsDictionary];
     [text drawInRect:rect withAttributes:attrsDictionary];
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

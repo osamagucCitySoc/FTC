@@ -43,6 +43,8 @@
 		0463168819ADAD0600CE742E /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463168619ADAD0600CE742E /* Photo.m */; };
 		0463168B19ADAF6200CE742E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0463168A19ADAF6200CE742E /* Constants.m */; };
 		0463168D19ADC93B00CE742E /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0463168C19ADC93B00CE742E /* CoreText.framework */; };
+		0463169019ADD16500CE742E /* Grid.png in Resources */ = {isa = PBXBuildFile; fileRef = 0463168E19ADD16500CE742E /* Grid.png */; };
+		0463169119ADD16500CE742E /* List.png in Resources */ = {isa = PBXBuildFile; fileRef = 0463168F19ADD16500CE742E /* List.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +88,8 @@
 		0463168919ADAF6200CE742E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		0463168A19ADAF6200CE742E /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		0463168C19ADC93B00CE742E /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		0463168E19ADD16500CE742E /* Grid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Grid.png; sourceTree = "<group>"; };
+		0463168F19ADD16500CE742E /* List.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = List.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +172,8 @@
 		0463164819ADAB3F00CE742E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0463168E19ADD16500CE742E /* Grid.png */,
+				0463168F19ADD16500CE742E /* List.png */,
 				0463164919ADAB3F00CE742E /* FtcTask-Info.plist */,
 				0463164A19ADAB3F00CE742E /* InfoPlist.strings */,
 				0463164D19ADAB3F00CE742E /* main.m */,
@@ -285,6 +291,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0463166019ADAB3F00CE742E /* Images.xcassets in Resources */,
+				0463169019ADD16500CE742E /* Grid.png in Resources */,
+				0463169119ADD16500CE742E /* List.png in Resources */,
 				0463164C19ADAB3F00CE742E /* InfoPlist.strings in Resources */,
 				0463165519ADAB3F00CE742E /* Main.storyboard in Resources */,
 			);

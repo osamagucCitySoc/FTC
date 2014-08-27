@@ -17,6 +17,7 @@
     UITableView* tableView; // to be used when showing in the table layout.
     BOOL firstLoad; // to be used to tell if this is the first load when the app started, this means we will be using [reloadData] in this case, otherwise will be updating using [beginUpdates]/[endUpdates]
     NSMutableArray *dataSource; // to be used to hold the flickr response
+    UIBarButtonItem* changeLayoutButton; // to be used to change between table and collection
 }
 
 @property (nonatomic, strong)NSCache *_imageCache; // this is to store the images as a cached version
