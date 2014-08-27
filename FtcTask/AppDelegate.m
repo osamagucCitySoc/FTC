@@ -20,8 +20,10 @@
 {
     // Override point for customization after application launch.
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-    MasterViewController *controller = (MasterViewController *)navigationController.topViewController;
+    MasterViewController *controller = [[MasterViewController alloc]init];
     controller.managedObjectContext = self.managedObjectContext;
+    [navigationController pushViewController:controller animated:YES];
+    
     return YES;
 }
 							
