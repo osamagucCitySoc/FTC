@@ -257,7 +257,7 @@
         [self.navigationController pushViewController:fullScreenVC animated:NO];
     }else
     {
-        OLGhostAlertView* alert = [[OLGhostAlertView alloc]initWithTitle:@"Sorry" message:@"Please wait till the image is loaded" timeout:3 dismissible:YES];
+        OLGhostAlertView* alert = [[OLGhostAlertView alloc]initWithTitle:[self get:@"SORRY_TITLE" alter:@"Sorry.."] message:[self get:@"SORRY_MESSAGE" alter:@"Please wait till the image is loaded"] timeout:3 dismissible:YES];
         [alert show];
     }
 }
@@ -531,7 +531,7 @@
     
     if(!firstLoad)
     {
-        urlString = [NSString stringWithFormat:@"%@%@",@"https://api.flickr.com/services/rest/?format=json&method=flickr.photos.search&tags=ocean&nojsoncallback=1&api_key=",flickrAPI];
+        urlString = [urlString stringByAppendingFormat:@"%@%f",@"&min_upload_date=",[lastTimeRefreshed timeIntervalSince1970]];
     }
     lastTimeRefreshed = [NSDate date];
     NSURL* url = [NSURL URLWithString:urlString];
@@ -544,8 +544,10 @@
                                                             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                                                                 [loaderView removeFromSuperview];
                                                                 [self.view setUserInteractionEnabled:YES];
+                                                                
+                                                                
                                                                 [refreshControl endRefreshing];
-                                                                OLGhostAlertView* alert = [[OLGhostAlertView alloc]initWithTitle:@"Done" message:@"Now Images Will Be Loaded Successively" timeout:3 dismissible:YES];
+                                                                OLGhostAlertView* alert = [[OLGhostAlertView alloc]initWithTitle:[self get:@"DONE_TITLE" alter:@"Done"] message:[self get:@"DONE_MESSAGE" alter:@"Now Images Will Be Loaded Successively"] timeout:3 dismissible:YES];
                                                                 [alert show];
                                                             }];
                                                             NSError* error2;

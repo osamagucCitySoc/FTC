@@ -1,4 +1,8 @@
 "MAIN_TITLE" = "Welcome..";
 "SETTINGS_TITLE" = "Settings..";
 "FULL_TITLE" = "Full Screen..";
+"DONE_TITLE" = "Done..";
+"SORRY_TITLE" = "Sorry..";
+"DONE_MESSAGE" = "Now Images Will Be Loaded Successively";
+"SORRY_MESSAGE" = "Please wait till the image is loaded";
 "BACK" = "Back..";

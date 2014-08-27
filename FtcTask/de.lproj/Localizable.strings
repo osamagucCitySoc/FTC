@@ -1,4 +1,8 @@
 "MAIN_TITLE" = "Willkommen..";
 "SETTINGS_TITLE" = "Einstellungen..";
 "FULL_TITLE" = "Bildschirmfüllend..";
+"DONE_TITLE" = "Fertig..";
+"DONE_MESSAGE" = "Jetzt Bilder nacheinander geladen werden";
+"SORRY_TITLE" = "Entschuldigung..";
+"SORRY_MESSAGE" = "Bitte warten Sie, bis das Bild geladen";
 "BACK" = "Zurück..";
