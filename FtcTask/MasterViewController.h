@@ -21,6 +21,10 @@
     UIBarButtonItem* changeLayoutButton; // to be used to change between table and collection
     UIRefreshControl* refreshControl;
     NSDate* lastTimeRefreshed;// to be used when a pull-to-refresh happens, this will make us only load from flickr all image posted after our last update, this is to eliminate loading redundant data
+    dispatch_queue_t backgroundQueuePicOperations; // to be used as a backgroud thread to do all processing functions on image (drawing title, resizing, face etc etc)
+    int currentChanges; // to be used to limit the simultenous changes to the UICollectionView when refreshing, as if you do more than 31 at the same time will crashe
+    dispatch_queue_t backgroundQueueUICollectionUpdates; // to be used as a backgroud thread to queue the changes because of pull to refresh to the UICollectionView
+
 }
 
 @property (nonatomic, strong)NSCache *_imageCache; // this is to store the images as a cached version

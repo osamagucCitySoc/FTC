@@ -34,11 +34,12 @@
     self.queue = [[NSOperationQueue alloc] init];
     self.queue.maxConcurrentOperationCount = 4;
     self._imageCache = [[NSCache alloc]init];
-    
+    backgroundQueuePicOperations = dispatch_queue_create("osama.rabie.image.thread", NULL);
+     backgroundQueueUICollectionUpdates = dispatch_queue_create("osama.rabie.collectionView.thread", NULL);
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
-    changeLayoutButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"Grid.png"] style:UIBarButtonItemStylePlain target:self action:@selector(changeLayout:)];
-    [changeLayoutButton setTag:1];
+    changeLayoutButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"List.png"] style:UIBarButtonItemStylePlain target:self action:@selector(changeLayout:)];
+    [changeLayoutButton setTag:2];
     self.navigationItem.rightBarButtonItem = changeLayoutButton;
     
     refreshControl = [[UIRefreshControl alloc]init];
@@ -61,12 +62,12 @@
                           duration:1.25
                            options:UIViewAnimationOptionTransitionCrossDissolve
                         animations:^
-        {
-            
-            [tableView removeFromSuperview];
-            [self.view addSubview:collectionView];
-            
-        }completion:NULL];
+         {
+             
+             [tableView removeFromSuperview];
+             [self.view addSubview:collectionView];
+             
+         }completion:NULL];
         
     }else if([changeLayoutButton tag] == 2) // we are now on collection and need to change to table
     {
@@ -92,10 +93,8 @@
 {
     tableView = [[UITableView alloc]initWithFrame:self.view.frame];
     [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:tableViewCellIdentifier];
-    [tableView addSubview:refreshControl];
     [tableView setDelegate:self];
     [tableView setDataSource:self];
-    [self.view addSubview:tableView];
 }
 /**
  This method is for creating and initializing the collection view.
@@ -105,9 +104,10 @@
     collectionView = [[UICollectionView alloc]initWithFrame:self.view.frame collectionViewLayout:[[UICollectionViewFlowLayout alloc]init]];
     [collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:collectionViewCellIdentifier];
     [collectionView addSubview:refreshControl];
+    [collectionView setBackgroundColor:[UIColor whiteColor]];
     [collectionView setDataSource:self];
     [collectionView setDelegate:self];
-    //[self.view addSubview:collectionView];
+    [self.view addSubview:collectionView];
 }
 /**
  This method for drawing an image with color background to be used as a placeholder while loading the image from Flickr
@@ -244,7 +244,7 @@
     
 	NSError *error = nil;
 	if (![self.fetchedResultsController performFetch:&error]) {
-	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+	    //NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 	    abort();
 	}
     
@@ -254,22 +254,25 @@
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
     if(!firstLoad)
+    {
         [tableView beginUpdates];
+    }
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
            atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
     if(!firstLoad)
-        switch(type) {
-            case NSFetchedResultsChangeInsert:
-                [tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-                break;
-                
-            case NSFetchedResultsChangeDelete:
-                [tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-                break;
+    {
+        if(type == NSFetchedResultsChangeInsert) {
+            [tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [collectionView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex]];
+        }else if(type == NSFetchedResultsChangeDelete)
+        {
+            [tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            [collectionView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]];
         }
+    }
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
@@ -277,31 +280,40 @@
       newIndexPath:(NSIndexPath *)newIndexPath
 {
     UITableView *tableVieww = tableView;
+    UICollectionView* collectionVieww = collectionView;
+    //NSLog(@"%@",@"YES");
     if(!firstLoad)
-        switch(type) {
-            case NSFetchedResultsChangeInsert:
-                [tableVieww insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-                break;
-                
-            case NSFetchedResultsChangeDelete:
-                [tableVieww deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-                break;
-                
-            case NSFetchedResultsChangeUpdate:
-                [self configureCell:[tableVieww cellForRowAtIndexPath:indexPath].contentView atIndexPath:indexPath neededSize:300];
-                break;
-                
-            case NSFetchedResultsChangeMove:
-                [tableVieww deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-                [tableVieww insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-                break;
+    {
+        if(type == NSFetchedResultsChangeInsert) {
+            [tableVieww insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            
+            [collectionVieww insertItemsAtIndexPaths:@[newIndexPath]];
+            
+        }else if(type == NSFetchedResultsChangeDelete)
+        {
+            [tableVieww deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [collectionVieww deleteItemsAtIndexPaths:@[indexPath]];
+            
+        }else if(type == NSFetchedResultsChangeUpdate)
+        {
+            [self configureCell:[tableVieww cellForRowAtIndexPath:indexPath].contentView atIndexPath:indexPath neededSize:300];
+            [self configureCell:[collectionVieww cellForItemAtIndexPath:indexPath].contentView atIndexPath:indexPath neededSize:100];
+        }else if(type ==  NSFetchedResultsChangeMove)
+        {
+            [tableVieww deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableVieww insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [collectionVieww deleteItemsAtIndexPaths:@[indexPath]];
+            [collectionVieww insertItemsAtIndexPaths:@[newIndexPath]];
         }
+    }
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
     if(!firstLoad)
+    {
         [tableView endUpdates];
+    }
 }
 
 - (void)insertNewObject:(NSDictionary*)photoDictionary
@@ -323,7 +335,7 @@
     // Save the context.
     NSError *error = nil;
     if (![context save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        //NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
 }
@@ -356,12 +368,14 @@
     [contentView addSubview:imageView];
     if (image)
     {
-        NSLog(@"%@",@"FROM CACHE");
+        //NSLog(@"%@",@"FROM CACHE");
         //[imageView setFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
         [imageView setImage:[self drawText:[[photoDict valueForKey:@"title"] description] inImage:image]];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         [imageView setNeedsDisplay];
-        [self startForFaceDetectionForImage:image imageView:imageView];
+        dispatch_async(backgroundQueuePicOperations, ^(void) {
+            [self startForFaceDetectionForImage:image imageView:imageView];
+        });
         
     }else
     {
@@ -377,13 +391,15 @@
             if (image)
             {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    NSLog(@"%@",@"GOT IT FROM FLICKR");
+                    //NSLog(@"%@",@"GOT IT FROM FLICKR");
                     [self._imageCache setObject:downloadedImageData forKey:imageKey];
                     // [imageView setFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
                     [imageView setImage:[self drawText:[[photoDict valueForKey:@"title"] description] inImage:image]];
                     imageView.contentMode = UIViewContentModeScaleAspectFit;
                     [imageView setNeedsDisplay];
-                    [self startForFaceDetectionForImage:image imageView:imageView];
+                    dispatch_async(backgroundQueuePicOperations, ^(void) {
+                        [self startForFaceDetectionForImage:image imageView:imageView];
+                    });
                 }];
             }
         }];
@@ -404,11 +420,11 @@
 -(void)loadAllFromFlicker
 {
     NSString* urlString =[NSString stringWithFormat:@"%@%@",@"https://api.flickr.com/services/rest/?format=json&method=flickr.photos.search&tags=it&nojsoncallback=1&api_key=",flickrAPI];
-//    to be used when a pull-to-refresh happens, this will make us only load from flickr all image posted after our last update, this is to eliminate loading redundant data
+    //    to be used when a pull-to-refresh happens, this will make us only load from flickr all image posted after our last update, this is to eliminate loading redundant data
     
     if(!firstLoad)
     {
-        urlString = [urlString stringByAppendingFormat:@"%@%f",@"&min_upload_date=",[lastTimeRefreshed timeIntervalSince1970]];
+        urlString = [NSString stringWithFormat:@"%@%@",@"https://api.flickr.com/services/rest/?format=json&method=flickr.photos.search&tags=ocean&nojsoncallback=1&api_key=",flickrAPI];
     }
     lastTimeRefreshed = [NSDate date];
     NSURL* url = [NSURL URLWithString:urlString];
@@ -434,11 +450,18 @@
                                                             {
                                                                 [dataSource addObjectsFromArray:returnedData];
                                                             }
-                                                            
+                                                            currentChanges = 0;
+                                                           
                                                             for(NSDictionary* photoDictionary in returnedData)
                                                             {
-                                                                [self insertNewObject:photoDictionary];
-                                                                
+                                                                currentChanges++;
+                                                                if(!firstLoad)
+                                                                {
+                                                                [self performSelectorOnMainThread:@selector(syncronizeIt:) withObject:photoDictionary waitUntilDone:YES];
+                                                                }else
+                                                                {
+                                                                    [self insertNewObject:photoDictionary];
+                                                                }
                                                             }
                                                             // UI Thread
                                                             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -464,6 +487,18 @@
 {
     [self loadAllFromFlicker];
 }
+/**
+ This method will be used to syncronize the changes requests to the uicollection view.
+ In the case that it is not the first time to load the app (i.e not allowed to use the realodData)
+ So it will crashe if the requests passes 31 at the same time. So what we do, is that we group the changes in chunks of 20 changes at a time :)
+ **/
+-(void)syncronizeIt:(NSDictionary*)dict
+{
+    float rem = (int)currentChanges%20;
+    rem--;
+    //rem *= 0.5;
+    [self performSelector:@selector(insertNewObject:) withObject:dict afterDelay:rem];
+}
 
 #pragma mark FaceDetection
 -(void)startForFaceDetectionForImage:(UIImage *)image imageView:(UIImageView*)imageView
@@ -473,9 +508,9 @@
     [image drawInRect:rect];
     UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    
     [self detectForFacesInUIImage:scaledImage imageView:imageView];
 }
-
 -(void)detectForFacesInUIImage:(UIImage *)facePicture imageView:(UIImageView*)imageView
 {
     CIImage* image = [CIImage imageWithCGImage:facePicture.CGImage];
@@ -519,7 +554,11 @@
     UIView* highlitView = [[UIView alloc] initWithFrame:frame];
     highlitView.layer.borderWidth = 1;
     highlitView.layer.borderColor = [[UIColor whiteColor] CGColor];
-    [imageView addSubview:highlitView];
+    
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        [imageView addSubview:highlitView];
+    });
+    
 }
 
 
