@@ -51,6 +51,7 @@
 		046316AB19AE24F500CE742E /* FullScreenImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046316AA19AE24F500CE742E /* FullScreenImageViewController.m */; };
 		046316AE19AE278B00CE742E /* CustomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046316AD19AE278B00CE742E /* CustomNavigationController.m */; };
 		046316B119AE33FD00CE742E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 046316B019AE33FD00CE742E /* Reachability.m */; };
+		046316B319AE3A0B00CE742E /* Close.png in Resources */ = {isa = PBXBuildFile; fileRef = 046316B219AE3A0B00CE742E /* Close.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +109,7 @@
 		046316AD19AE278B00CE742E /* CustomNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomNavigationController.m; sourceTree = "<group>"; };
 		046316AF19AE33FD00CE742E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		046316B019AE33FD00CE742E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		046316B219AE3A0B00CE742E /* Close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Close.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +194,7 @@
 		0463164819ADAB3F00CE742E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				046316B219AE3A0B00CE742E /* Close.png */,
 				046316AF19AE33FD00CE742E /* Reachability.h */,
 				046316B019AE33FD00CE742E /* Reachability.m */,
 				0463169419AE166900CE742E /* OLGhostAlertView.h */,
@@ -321,6 +324,7 @@
 			files = (
 				0463166019ADAB3F00CE742E /* Images.xcassets in Resources */,
 				0463169019ADD16500CE742E /* Grid.png in Resources */,
+				046316B319AE3A0B00CE742E /* Close.png in Resources */,
 				0463169319AE109600CE742E /* Settings.png in Resources */,
 				046316A119AE19AF00CE742E /* Localizable.strings in Resources */,
 				0463169119ADD16500CE742E /* List.png in Resources */,

@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FullScreenImageViewController : UIViewController<UIScrollViewDelegate>
+@interface FullScreenImageViewController : UIViewController
 {
     NSBundle* bundle;
-    UIBarButtonItem* backButton;
+    UIButton *button;
     UIImageView* imageView;
-    UIScrollView* scrollView;
     UIPinchGestureRecognizer* pinch;
+    UITapGestureRecognizer* tap;
 }
 
 

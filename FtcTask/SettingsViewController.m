@@ -60,8 +60,7 @@
     [self.view addSubview:englishSwitch];
     [self.view addSubview:germanSwitch];
     [self.view addSubview:engLabel];
-    [self.view addSubview:germanLabel];
-    
+    [self.view addSubview:germanLabel];    
     
     backButton = [[UIBarButtonItem alloc]initWithTitle:[self get:@"BACK" alter:@"Back"] style:UIBarButtonItemStylePlain target:self action:@selector(backClicked:)];
     self.navigationItem.leftBarButtonItem = backButton;

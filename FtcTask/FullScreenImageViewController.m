@@ -29,15 +29,22 @@
 {
     [super viewDidLoad];
     
+    // This is to make the UI adjust with the new ios7 action bar. So views will not go below the action bar, but instead will start under it.
+    if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+
+    [self.navigationItem setHidesBackButton:YES animated:YES];
+    
     pinch = [[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(handlePinch:)];
+    tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleTap:)];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self setLanguage:[[NSUserDefaults standardUserDefaults] objectForKey:languageSelected]];
-    backButton = [[UIBarButtonItem alloc]initWithTitle:[self get:@"BACK" alter:@"Back"] style:UIBarButtonItemStylePlain target:self action:@selector(backClicked:)];
-    self.navigationItem.leftBarButtonItem = backButton;
+       
+
+    self.navigationItem.leftBarButtonItem = nil;
     [self setTitle:[self get:@"FULL_TITLE" alter:@"Full Screen.."]];
-    
-    scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
     
     imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
     
@@ -46,6 +53,14 @@
     [imageView setUserInteractionEnabled:YES];
     [imageView addGestureRecognizer:pinch];
     [self.view addSubview:imageView];
+    button = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-64,10,64,64)];
+    
+    [button setBackgroundImage:[UIImage imageNamed:@"Close.png"]forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(backClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [button setAlpha:0.0];
+    [self.view addSubview:button];
+    [self.view addGestureRecognizer:tap];
+
     
 }
 -(void)viewWillAppear:(BOOL)animated{
@@ -67,6 +82,8 @@
         [imageView setContentMode:UIViewContentModeScaleAspectFit];
         
         [self.view addSubview:imageView];
+        [self.view bringSubviewToFront:button];
+        [button setFrame:CGRectMake(self.view.bounds.size.width-64,10,64,64)];
     }else
     {
         [imageView removeFromSuperview];
@@ -78,6 +95,8 @@
         [imageView setContentMode:UIViewContentModeScaleAspectFit];
         
         [self.view addSubview:imageView];
+        [self.view bringSubviewToFront:button];
+        [button setFrame:CGRectMake(self.view.bounds.size.width-64,10,64,64)];
     }
 
 }
@@ -120,6 +139,10 @@
 - (void)handlePinch:(UIPinchGestureRecognizer *)recognizer {
     recognizer.view.transform = CGAffineTransformScale(recognizer.view.transform, recognizer.scale, recognizer.scale);
     recognizer.scale = 1;
+}
+
+- (void)handleTap:(UITapGestureRecognizer *)recognizer {
+    [button setAlpha:(1-button.alpha)];
 }
 
 @end
